@@ -1,0 +1,19 @@
+{
+  "name": "pharmaceutical",
+  "version": "1.0.0",
+  "description": "",
+  "main": "basic-logger.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SafeMedsSeniorDesign/Pharmaceutical.git"
+  },
+  "author": "slashroot101",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SafeMedsSeniorDesign/Pharmaceutical/issues"
+  },
+  "homepage": "https://github.com/SafeMedsSeniorDesign/Pharmaceutical#readme"
+}
