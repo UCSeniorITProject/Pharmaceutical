@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/SafeMedsSeniorDesign/Pharmaceutical/issues"
   },
-  "homepage": "https://github.com/SafeMedsSeniorDesign/Pharmaceutical#readme"
+  "homepage": "https://github.com/SafeMedsSeniorDesign/Pharmaceutical#readme",
+  "dependencies": {
+    "boom": "^7.3.0",
+    "fastify": "^2.11.0",
+    "fastify-swagger": "^2.5.0",
+    "qs": "^6.9.1"
+  }
 }
