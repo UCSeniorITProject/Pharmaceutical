@@ -17,11 +17,6 @@ const Drug = SequelizeInstance.define('Drug', {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
-  isGeneric: {
-    type: Sequelize.DataTypes.STRING,
-    values: activeEnum,
-    allowNull: false,
-  },
   federalDrugIdentifier: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
@@ -29,7 +24,7 @@ const Drug = SequelizeInstance.define('Drug', {
   active: {
     type: Sequelize.DataTypes.STRING,
     values: activeEnum,
-  }
+  },
 });
 
 Drug.sync({force: config.db.forceTableCreation});

@@ -46,23 +46,29 @@ exports.patchDrug = async () => {
       return {drug: drug.dataValues}
     }
   } catch (err) {
-
+    boomify(err);
   }
 };
 
 exports.getDrugList = async () => {
   try {
+    const drugs = await Drug.findAll();
 
+    return {drugs: drugs.map(e => e.dataValues)};
   } catch (err) {
-
+    throw boomify(err);
   }
 }
 
 exports.getDrugWithFilter = async () => {
   try {
+    const drugs = await Drug.findAll({
+      wheree: req.query,
+    });
 
+    return {drugs: drugs.map(x=>x.dataValues)};
   } catch (err) {
-
+    throw boomify(err);
   }
 }
 
