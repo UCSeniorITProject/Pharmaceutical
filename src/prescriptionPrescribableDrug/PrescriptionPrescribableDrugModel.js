@@ -12,17 +12,23 @@ const PrescriptionPrescribableDrug = SequelizeInstance.define('PrescriptionPresc
   prescriptionId: {
     type: Sequelize.DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'Prescriptions',
+      key: 'prescriptionId',
+    }
   },
   prescribableId: {
     type: Sequelize.DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'Prescribables',
+      key: 'prescribableId',
+    }
   },
   active: {
     type: Sequelize.DataTypes.STRING,
     values: activeEnum,
   }
 });
-
-PrescriptionPrescribableDrug.sync({force: config.db.forceTableCreation});
 
 module.exports = PrescriptionPrescribableDrug;
