@@ -3,7 +3,6 @@ const Sequelize = require('sequelize');
 const activeEnum = require('../constants/activeEnum');
 const config = require('../../config');
 
-
 const Prescription = SequelizeInstance.define('Prescription',{
 	prescriptionId: {
 		type: Sequelize.DataTypes.INTEGER,
