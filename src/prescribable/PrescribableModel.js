@@ -21,6 +21,14 @@ const Prescribable = SequelizeInstance.define('Prescribable',  {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
+  drugId: {
+    type: Sequelize.DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Drugs',
+      key: 'drugId',
+    },
+  },
   minWeight: {
     type: Sequelize.DataTypes.DECIMAL,
     allowNull: false,
@@ -36,6 +44,5 @@ const Prescribable = SequelizeInstance.define('Prescribable',  {
   },
 });
 
-Prescribable.sync({force: config.db.forceTableCreation});
 
 module.exports = Prescribable;

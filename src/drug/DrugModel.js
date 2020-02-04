@@ -31,6 +31,4 @@ const Drug = SequelizeInstance.define('Drug', {
   },
 });
 
-Drug.sync({force: config.db.forceTableCreation});
-
 module.exports = Drug;

@@ -3,7 +3,6 @@ const Sequelize = require('sequelize');
 const activeEnum = require('../constants/activeEnum');
 const config = require('../../config');
 
-
 const Prescription = SequelizeInstance.define('Prescription',{
 	prescriptionId: {
 		type: Sequelize.DataTypes.INTEGER,
@@ -13,6 +12,10 @@ const Prescription = SequelizeInstance.define('Prescription',{
 	patientId: {
 		type: Sequelize.DataTypes.INTEGER,
 		allowNull: false,
+		references: {
+			model: 'Patient',
+			key: 'PatientId',
+		},
 	},
 	pharmacyId: {
 		type: Sequelize.DataTypes.INTEGER,
@@ -28,7 +31,5 @@ const Prescription = SequelizeInstance.define('Prescription',{
 		allowNull: false,
 	},
 });
-
-Prescription.sync({force: config.db.forceTableCreation});
 
 module.exports = Prescription;

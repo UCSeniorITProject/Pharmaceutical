@@ -22,6 +22,10 @@ const prescribableBeforeSave = {
     enum: ['M', 'F'],
     description: 'The gender the prescribable was made for',
   },
+  drugId: {
+    type: 'number',
+    description: 'The id of the related drug',
+  },
   active: {
     type: 'string',
     enum: activeEnum,
@@ -110,7 +114,7 @@ exports.deletePrescribable = {
           default: 'The prescribable was not found',
         },
       }, 
-    }
+    },
   },
 };
 
