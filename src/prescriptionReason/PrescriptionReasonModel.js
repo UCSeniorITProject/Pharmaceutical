@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const activeEnum = require('../constants/activeEnum');
 
 const PrescriptionReason = SequelizeInstance.define('PrescriptionReason', {
-  reasonId: {
+  prescriptionReasonId: {
     type: Sequelize.DataTypes.INTEGER,
 		primaryKey: true,
 		autoIncrement: true,
