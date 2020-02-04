@@ -45,6 +45,30 @@ exports.patchDrug = async () => {
 
       return {drug: drug.dataValues}
     }
+
+    const updatedDrugCount = await Drug.update(
+      req.body.drug,
+      {
+        where: {
+          id: req.params.id,
+        },
+        individualHooks: true,
+      },
+    );
+
+    if(updatedDrugCount[1].length === 0){
+      return reply
+                .code(404)
+                .send();
+    }
+
+    const updatedDrug = await Drug.findOne({
+      where: {
+        id: req.params.id,
+      }
+    });
+
+    return {user: updatedDrug.dataValues};
   } catch (err) {
     boomify(err);
   }
