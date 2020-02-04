@@ -3,27 +3,32 @@ const Sequelize = require('sequelize');
 const activeEnum = require('../constants/activeEnum');
 const config = require('../../config');
 
-const Drug = SequelizeInstance.define('Drug', {
-  drugId: {
+const Prescribable = SequelizeInstance.define('Prescribable',  {
+  prescribableId: {
     type: Sequelize.DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  name: {
+  dosage: {
+    type: Sequelize.DataTypes.DECIMAL,
+    allowNull: false,
+  },
+  dosageUnit: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
-  manufacturer: {
+  dosageFrequency: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
-  nonGenericParentId: {
-    type: Sequelize.DataTypes.INTEGER,
-    allowNull: true,
+  minWeight: {
+    type: Sequelize.DataTypes.DECIMAL,
+    allowNull: false,
   },
-  federalDrugIdentifier: {
+  requiredGender: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
+    values: ['M', 'F'],
   },
   active: {
     type: Sequelize.DataTypes.STRING,
@@ -31,6 +36,6 @@ const Drug = SequelizeInstance.define('Drug', {
   },
 });
 
-Drug.sync({force: config.db.forceTableCreation});
+Prescribable.sync({force: config.db.forceTableCreation});
 
-module.exports = Drug;
+module.exports = Prescribable;
