@@ -3,7 +3,7 @@ const Prescribable = require('./PrescribableModel');
 
 exports.createPrescribable = async (req, reply) => {
   try {
-    const prescribable = new Prescribable.build(req.body.prescribable);
+    const prescribable = Prescribable.build(req.body.prescribable);
 
     const savedPrescribable = await prescribable.save();
     return {prescribable: prescribable.dataValues};
