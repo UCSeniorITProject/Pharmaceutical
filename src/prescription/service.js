@@ -82,7 +82,7 @@ exports.getPrescriptionWithFilter = async (req, reply) => {
 			where: req.query,
 		});
 
-		return {prescription: prescriptions.map(x => x.dataValues);}
+		return {prescription: prescriptions.map(x => x.dataValues)}
 	} catch (err) {
 		throw boomify(err);
 	}
