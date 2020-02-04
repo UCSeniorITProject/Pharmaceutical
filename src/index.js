@@ -14,6 +14,7 @@ const swagger = require('../swagger-config');
     fastify.register(require('./drug'), {prefix: '/api/'});
     fastify.register(require('./prescribable'), {prefix: '/api'});
     fastify.register(require('./prescription'), {prefix: '/api'});
+    fastify.register(require('./prescriptionPrescribableDrug'), {prefix: '/api'});
     createRelationships();
     await fastify.listen(config.port, config.serverHost);
     fastify.swagger();

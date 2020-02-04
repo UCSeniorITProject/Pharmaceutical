@@ -6,7 +6,7 @@ exports.createPrescribable = async (req, reply) => {
     const prescribable = Prescribable.build(req.body.prescribable);
 
     const savedPrescribable = await prescribable.save();
-    return {prescribable: prescribable.dataValues};
+    return {prescribable: savedPrescribable.dataValues};
   } catch (err) {
     throw boomify(err);
   }
@@ -38,7 +38,7 @@ exports.deletePrescribable = async (req, reply) => {
 
 exports.patchPrescribable = async (req,  reply) => {
   try {
-    if(Object.entriies(req.body.prescribable).length === 0){
+    if(Object.entries(req.body.prescribable).length === 0){
       const prescribable = await Prescribable.findOne({
         where: {
           id: req.params.id,

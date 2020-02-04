@@ -110,7 +110,7 @@ exports.deletePrescribable = {
           default: 'The prescribable was not found',
         },
       }, 
-    }
+    },
   },
 };
 
