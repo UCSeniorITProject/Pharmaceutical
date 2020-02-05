@@ -155,7 +155,7 @@ exports.prescriptionWithFilter = {
       type: 'object',
       query: {
         type: 'object',
-        properties: prescriptionBeforeSave,
+        properties: prescriptionAfterSave,
       },
       properties: {
         prescriptions: {
