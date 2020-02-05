@@ -156,7 +156,7 @@ exports.getPrescriptionPrescribableDrugWithFilter = {
   summary: 'Grabs all prescription prescribable drugs that match the given filter',
   query: {
     type: 'object',
-    properties: prescriptionPrescribableDrugBeforeSave,
+    properties: prescriptionPrescribableDrugAfterSave,
   },
   exposeRoute: true,
   response: {

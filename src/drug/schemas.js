@@ -180,7 +180,7 @@ exports.drugWithFilter = {
       type: 'object',
       query: {
         type: 'object',
-        properties: drugBeforeSave,
+        properties: drugAfterSave,
       },
       properties: {
         drugs: {

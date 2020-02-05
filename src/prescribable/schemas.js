@@ -195,7 +195,7 @@ exports.getPrescribableWithFilter = {
   summary: 'Grabs all prescibables that match the given filter',
   query: {
     type: 'object',
-    properties: prescribableBeforeSave,
+    properties: prescribableAfterSave,
   },
   exposeRoute: true,
   response: {

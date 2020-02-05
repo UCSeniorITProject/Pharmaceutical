@@ -29,7 +29,7 @@ exports.deletePrescriptionPrescribableDrug = async (req, reply) =>  {
     }
 
     return reply
-              .code(404)
+              .code(204)
               .send();
   } catch (err){
     throw boomify(err);
