@@ -38,7 +38,7 @@ exports.deletePrescription = async (req, reply) => {
 
 exports.patchPrescription = async (req, reply) => {
 	try {
-		if(Object.entriies(req.body.prescription).length === 0){
+		if(Object.entries(req.body.prescription).length === 0){
       const prescription = await Prescription.findOne({
         where: {
           id: req.params.id,

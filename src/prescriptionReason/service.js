@@ -1,5 +1,5 @@
 const {boomify} = require('boom');
-const PrescriptionReason = require('./PrescriptionReason');
+const PrescriptionReason = require('./PrescriptionReasonModel');
 
 exports.createPrescriptionReason = async (req, reply) => {
   try {
