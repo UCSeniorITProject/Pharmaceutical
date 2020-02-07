@@ -35,7 +35,7 @@ const prescribableBeforeSave = {
 
 const prescribableAfterSave = { 
   ...prescribableBeforeSave,
-  prescirbableId: {
+  id: {
     type: 'number',
     description: 'The id of the prescribable',
   },

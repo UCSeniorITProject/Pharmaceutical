@@ -12,13 +12,13 @@ const sequelizeInstance = require('./dbConnection');
 (async () => {
   try {
     fastify.register(require('fastify-swagger'), swagger.options);
-    fastify.register(require('./drug'), {prefix: '/api/'});
-    fastify.register(require('./prescribable'), {prefix: '/api'});
-    fastify.register(require('./prescription'), {prefix: '/api'});
-		fastify.register(require('./prescriptionPrescribableDrug'), {prefix: '/api'});
-		fastify.register(require('./prescriptionReason'), {prefix: '/api'});
-		fastify.register(require('./prescriptionPrescribableDrugReason'), {prefix: '/api'});
+		fastify.register(require('./drug'), {prefix: '/api/'});
+		fastify.register(require('./prescribable'), {prefix: '/api'});
 		fastify.register(require('./pharmacy'), {prefix: '/api'});
+		fastify.register(require('./prescription'), {prefix: '/api'});
+		fastify.register(require('./prescriptionReason'), {prefix: '/api'});
+		fastify.register(require('./prescriptionPrescribableDrug'), {prefix: '/api'});
+		fastify.register(require('./prescriptionPrescribableDrugReason'), {prefix: '/api'});
     createRelationships();
     sequelizeInstance.query('EXEC sp_msforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"')
       .then(function(){

@@ -12,7 +12,7 @@ const PrescriptionPrescribableDrugReason = SequelizeInstance.define('Prescriptio
 		type: Sequelize.DataTypes.INTEGER,
 		allowNull: false,
 		references: {
-			model: 'PrescriptionPrescribableDrugs',
+			model: {tableName: 'PrescriptionPrescribableDrugs', schema: 'dbo',},
 			key: 'prescriptionPrescribableDrugId',
 		},
 	},
@@ -20,7 +20,7 @@ const PrescriptionPrescribableDrugReason = SequelizeInstance.define('Prescriptio
 		type: Sequelize.DataTypes.INTEGER,
 		allowNull: false,
 		references: {
-			model: 'PrescriptionReasons',
+			model: {tableName: 'PrescriptionReasons', schema: 'dbo',},
 			key: 'prescriptionReasonId',
 		},
 	},
