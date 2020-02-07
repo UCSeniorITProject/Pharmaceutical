@@ -21,7 +21,7 @@ const PrescriptionPrescribableDrug = SequelizeInstance.define('PrescriptionPresc
     allowNull: false,
     references: {
       model: 'Prescribables',
-      key: 'id',
+      key: 'prescribableId',
     }
   },
   active: {

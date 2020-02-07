@@ -4,6 +4,11 @@ const activeEnum = require('../constants/activeEnum');
 const config = require('../../config');
 
 const Prescribable = SequelizeInstance.define('Prescribable',  {
+	prescribableId: {
+		type: Sequelize.DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+	},
   dosage: {
     type: Sequelize.DataTypes.DECIMAL,
     allowNull: false,
