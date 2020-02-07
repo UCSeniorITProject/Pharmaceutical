@@ -17,7 +17,8 @@ const sequelizeInstance = require('./dbConnection');
     fastify.register(require('./prescription'), {prefix: '/api'});
 		fastify.register(require('./prescriptionPrescribableDrug'), {prefix: '/api'});
 		fastify.register(require('./prescriptionReason'), {prefix: '/api'});
-		fastify.register(require('./prescriptionPrescribableDrugReason'), {prefix: '/api'})
+		fastify.register(require('./prescriptionPrescribableDrugReason'), {prefix: '/api'});
+		fastify.register(require('./pharmacy'), {prefix: '/api'});
     createRelationships();
     sequelizeInstance.query('EXEC sp_msforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"')
       .then(function(){

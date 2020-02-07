@@ -1,7 +1,6 @@
 const SequelizeInstance = require('../dbConnection');
 const Sequelize = require('sequelize');
 const activeEnum = require('../constants/activeEnum');
-const config = require('../../config');
 
 const Prescription = SequelizeInstance.define('Prescription',{
 	prescriptionId: {
@@ -20,6 +19,10 @@ const Prescription = SequelizeInstance.define('Prescription',{
 	pharmacyId: {
 		type: Sequelize.DataTypes.INTEGER,
 		allowNull: false,
+		references: {
+			model: 'Pharmacies',
+			key: 'pharmacyId',
+		},
 	},
 	doctorId: {
 		type: Sequelize.DataTypes.INTEGER,

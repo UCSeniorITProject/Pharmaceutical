@@ -48,7 +48,7 @@ exports.patchPrescribable = async (req,  reply) => {
       return {prescribable: prescribable.dataValues};
     }
 
-    const updatedPrescribableCount = await prescribable.update(
+    const updatedPrescribableCount = await Prescribable.update(
       req.body.prescribable,
       {
         where: {

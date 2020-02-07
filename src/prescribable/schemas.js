@@ -192,7 +192,7 @@ exports.getPrescribableList = {
 exports.getPrescribableWithFilter = {
   description: 'Gets all prescribables that match the given filter',
   tags: ['Prescribable'],
-  summary: 'Grabs all prescibables that match the given filter',
+  summary: 'Grabs all prescribables that match the given filter',
   query: {
     type: 'object',
     properties: prescribableAfterSave,
