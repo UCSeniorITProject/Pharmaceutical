@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const activeEnum = require('../constants/activeEnum');
 
 const PrescriptionPrescribableDrug = SequelizeInstance.define('PrescriptionPrescribableDrug', {
-  prescriptionPrescribableDrugId:  {
+  prescriptionPrescribableDrugId: {
     type: Sequelize.DataTypes.INTEGER,
 		primaryKey: true,
 		autoIncrement: true,
@@ -27,7 +27,7 @@ const PrescriptionPrescribableDrug = SequelizeInstance.define('PrescriptionPresc
   active: {
     type: Sequelize.DataTypes.STRING,
     values: activeEnum,
-  }
+  },
 });
 
 module.exports = PrescriptionPrescribableDrug;
