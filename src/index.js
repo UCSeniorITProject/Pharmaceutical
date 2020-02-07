@@ -1,4 +1,3 @@
-const createRelationships = require('./relationships');  
 const config = require('../config');
 const qs = require('qs');
 const fastify = require('fastify')({
@@ -19,7 +18,6 @@ const sequelizeInstance = require('./dbConnection');
 		fastify.register(require('./prescriptionReason'), {prefix: '/api'});
 		fastify.register(require('./prescriptionPrescribableDrug'), {prefix: '/api'});
 		fastify.register(require('./prescriptionPrescribableDrugReason'), {prefix: '/api'});
-    createRelationships();
     sequelizeInstance.query('EXEC sp_msforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"')
       .then(function(){
           return sequelizeInstance.sync({ force: config.db.forceTableCreation });
