@@ -173,15 +173,15 @@ exports.drugWithFilter = {
   description: 'Gets a list of drugs with a filter',
   tags: ['Drug'],
   summary: 'Gets a list of drugs with a filter',
-  exposeRoute: true,
+	exposeRoute: true,
+	query: {
+		type: 'object',
+		properties: drugAfterSave,
+	},
   response: {
     200: {
       description: 'Successfully grabbed a list of all drugs with a filter',
       type: 'object',
-      query: {
-        type: 'object',
-        properties: drugAfterSave,
-      },
       properties: {
         drugs: {
           type: 'array',
