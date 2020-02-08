@@ -176,7 +176,7 @@ exports.getPharmacyWithFilter = {
       type: 'object',
       description: 'Succesfully got a list of all pharmacies',
       properties: {
-        pharmacy: {
+        pharmacies: {
           type: 'array',
           items: {
             type: 'object',

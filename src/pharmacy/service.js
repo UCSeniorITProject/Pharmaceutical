@@ -17,7 +17,7 @@ exports.deletePharmacy = async (req, reply) => {
 	try {
 		const pharmacyDeletedCount = await Pharmacy.destroy({
 			where: {
-				id: req.params.id,
+				pharmacyId: req.params.id,
 			},
 		});
 	
@@ -42,18 +42,18 @@ exports.patchPharmacy = async (req, reply) => {
 		if(Object.entries(req.body.pharmacy).length === 0){
 			const pharmacy = await Pharmacy.findOne({
 				where: {
-					id: req.params.id,
+					pharmacyId: req.params.id,
 				}
 			});
 
 			return {pharmacy: pharmacy.dataValues};
 		}
-
-		const updatedPharmacyCount = await Pharmacy.upate(
+		console.log(req.body.pharmacy)
+		const updatedPharmacyCount = await Pharmacy.update(
 			req.body.pharmacy,
 			{
 				where: {
-					id: req.params.id,
+					pharmacyId: req.params.id,
 				},
 				individualHooks: true,
 			}
@@ -67,7 +67,7 @@ exports.patchPharmacy = async (req, reply) => {
 
 		const updatedPharmacy = await Pharmacy.findOne({
 			where: {
-				id: req.params.id,
+				pharmacyId: req.params.id,
 			},
 		});
 
@@ -84,7 +84,6 @@ exports.getPharmacyWithFilter = async (req, reply) => {
 				where: req.query,
 			},
 		);
-
 		return {pharmacies: pharmacies.map(x => x.dataValues)};
 	} catch (err) {
 		throw boomify(err);
