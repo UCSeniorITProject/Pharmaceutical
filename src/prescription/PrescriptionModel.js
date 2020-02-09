@@ -12,8 +12,8 @@ const Prescription = SequelizeInstance.define('Prescription',{
 		type: Sequelize.DataTypes.INTEGER,
 		allowNull: false,
 		references: {
-			model: {tableName: 'Patient', schema: 'dbo',},
-			key: 'PatientId',
+			model: {tableName: 'Patients', schema: 'dbo',},
+			key: 'patientId',
 		},
 	},
 	pharmacyId: {
