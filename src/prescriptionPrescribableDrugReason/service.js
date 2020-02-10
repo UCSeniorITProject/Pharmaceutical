@@ -16,7 +16,7 @@ exports.deletePrescriptionPrescribableDrugReason = async (req, reply) => {
 	try {
 		const prescriptionPrescribableDrugReasonDeleteCount = await PrescriptionPrescribableDrugReason.destroy({
 			where: {
-				id: req.params.id,
+				prescriptionId: req.params.id,
 			},
 		});
 
@@ -41,7 +41,7 @@ exports.patchPrescriptionPrescribableDrugReason = async (req, reply) => {
 		if(Object.entries(req.body.prescriptionPrescribableDrugReason).length === 0){
       const prescriptionPrescribableDrugReason = await PrescriptionPrescribableDrugReason.findOne({
         where: {
-          id: req.params.id,
+          prescriptionId: req.params.id,
         }
       });
 

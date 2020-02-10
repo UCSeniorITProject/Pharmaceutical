@@ -16,7 +16,7 @@ exports.deletePrescriptionReason = async (req, reply) => {
   try {
     const prescriptionReasonDeletedCount = await PrescriptionReason.destroy({
       where: {
-        id: req.params.id,
+        prescriptionId: req.params.id,
       },
     });
 
@@ -41,7 +41,7 @@ exports.patchPrescriptionReason = async (req, reply) => {
     if(Object.entries(req.body.prescriptionReason).length === 0){
       const prescriptionReason = await PrescriptionReason.findOne({
         where: {
-          id: req.params.id,
+          prescriptionId: req.params.id,
         }
       });
 
@@ -52,7 +52,7 @@ exports.patchPrescriptionReason = async (req, reply) => {
       req.body.prescriptionReason,
       {
         where: {
-          id: req.params.id,
+          prescriptionId: req.params.id,
         },
         individualHooks: true,
       }
@@ -66,7 +66,7 @@ exports.patchPrescriptionReason = async (req, reply) => {
 
     const prescriptionReason = await PrescriptionReason.findOne({
       where: {
-        id: req.params.id,
+        prescriptionId: req.params.id,
       },
     });
 

@@ -16,7 +16,7 @@ exports.deletePrescriptionPrescribableDrug = async (req, reply) =>  {
   try {
     const prescriptionPrescribableDrugDeletedCount = await PrescriptionPrescribableDrug.destroy({
       where: {
-        id: req.params.id,
+        prescriptionId: req.params.id,
       },
     });
 
@@ -41,7 +41,7 @@ exports.patchPrescriptionPrescribableDrug = async (req, reply) =>  {
     if(Object.entries(req.body.prescriptionPrescribableDrug).length === 0){
       const prescriptionPrescribableDrug = await PrescriptionPrescribableDrug.findOne({
         where: {
-          id: req.params.id,
+          prescriptionId: req.params.id,
         }
       });
 
@@ -52,7 +52,7 @@ exports.patchPrescriptionPrescribableDrug = async (req, reply) =>  {
       req.body.prescriptionPrescribableDrug,
       {
         where: {
-          id: req.params.id,
+          prescriptionId: req.params.id,
         },
         individualHooks: true,
       }
@@ -66,7 +66,7 @@ exports.patchPrescriptionPrescribableDrug = async (req, reply) =>  {
 
     const prescriptionPrescribableDrug = await PrescriptionPrescribableDrug.findOne({
       where: {
-        id: req.params.id,
+        prescriptionId: req.params.id,
       },
     });
 

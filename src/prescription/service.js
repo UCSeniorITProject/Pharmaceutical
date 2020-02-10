@@ -16,7 +16,7 @@ exports.deletePrescription = async (req, reply) => {
 	try {
 		const prescriptionDeleteCount = await Prescription.destroy({
 			where: {
-				id: req.params.id,
+				prescriptionId: req.params.id,
 			},
 		});
 	
@@ -41,7 +41,7 @@ exports.patchPrescription = async (req, reply) => {
 		if(Object.entries(req.body.prescription).length === 0){
       const prescription = await Prescription.findOne({
         where: {
-          id: req.params.id,
+          prescriptionId: req.params.id,
         }
       });
 
@@ -52,7 +52,7 @@ exports.patchPrescription = async (req, reply) => {
       req.body.prescription,
       {
         where: {
-          id: req.params.id,
+          prescriptionId: req.params.id,
         },
         individualHooks: true,
       }
@@ -66,7 +66,7 @@ exports.patchPrescription = async (req, reply) => {
 
     const updatedPrescription = await Prescription.findOne({
       where: {
-        id: req.params.id,
+        prescriptionId: req.params.id,
       },
     });
 
