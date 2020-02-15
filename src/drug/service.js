@@ -1,7 +1,7 @@
 const Drug = require('./DrugModel');
 const {boomify} = require('boom');
 
-exports.createDrug = async () => {
+exports.createDrug = async (req, reply) => {
   try {
     const drug = Drug.build(req.body.drug);
 
@@ -12,7 +12,7 @@ exports.createDrug = async () => {
   }
 };
 
-exports.deleteDrug = async () => {
+exports.deleteDrug = async (req, reply) => {
   try {
     const deletedDrugCount = await Drug.destroy({
       where: {
@@ -36,7 +36,7 @@ exports.deleteDrug = async () => {
   }
 };
 
-exports.patchDrug = async () => {
+exports.patchDrug = async (req, reply) => {
   try {
     if(Object.entries(req.body.drug).length === 0){
       const drug = await Drug.findOne({where: {
@@ -74,7 +74,7 @@ exports.patchDrug = async () => {
   }
 };
 
-exports.getDrugList = async () => {
+exports.getDrugList = async (req, reply) => {
   try {
     const drugs = await Drug.findAll();
 
@@ -84,7 +84,7 @@ exports.getDrugList = async () => {
   }
 }
 
-exports.getDrugWithFilter = async () => {
+exports.getDrugWithFilter = async (req, reply) => {
   try {
     const drugs = await Drug.findAll({
       wheree: req.query,
