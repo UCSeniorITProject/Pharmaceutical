@@ -86,8 +86,9 @@ exports.getDrugList = async (req, reply) => {
 
 exports.getDrugWithFilter = async (req, reply) => {
   try {
+    console.log(req.query)
     const drugs = await Drug.findAll({
-      wheree: req.query,
+      where: req.query,
     });
 
     return {drugs: drugs.map(x=>x.dataValues)};
