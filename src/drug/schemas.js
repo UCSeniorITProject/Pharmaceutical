@@ -176,7 +176,7 @@ exports.drugWithFilter = {
 	exposeRoute: true,
 	query: {
 		type: 'object',
-		properties: drugAfterSave,
+		properties: {...drugAfterSave,  ids: {type: 'array', items: {type:'number'}}},
 	},
   response: {
     200: {

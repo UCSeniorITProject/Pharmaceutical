@@ -86,9 +86,14 @@ exports.getDrugList = async (req, reply) => {
 
 exports.getDrugWithFilter = async (req, reply) => {
   try {
-    console.log(req.query)
+    if(req.query.ids && req.query.ids.length > 0){
+      req.query.drugId = {
+        $in: req.query.ids,
+      }
+      delete req.query.ids;
+    }
     const drugs = await Drug.findAll({
-      where: req.query,
+      ...req.query,
     });
 
     return {drugs: drugs.map(x=>x.dataValues)};
