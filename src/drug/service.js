@@ -16,7 +16,7 @@ exports.deleteDrug = async (req, reply) => {
   try {
     const deletedDrugCount = await Drug.destroy({
       where: {
-        id: req.params.id,
+        drugId: req.params.id,
       },
     });
 
@@ -40,7 +40,7 @@ exports.patchDrug = async (req, reply) => {
   try {
     if(Object.entries(req.body.drug).length === 0){
       const drug = await Drug.findOne({where: {
-        id: req.params.id,
+        drugId: req.params.id,
       }});
 
       return {drug: drug.dataValues}
@@ -50,7 +50,7 @@ exports.patchDrug = async (req, reply) => {
       req.body.drug,
       {
         where: {
-          id: req.params.id,
+          drugId: req.params.id,
         },
         individualHooks: true,
       },
@@ -64,7 +64,7 @@ exports.patchDrug = async (req, reply) => {
 
     const updatedDrug = await Drug.findOne({
       where: {
-        id: req.params.id,
+        drugId: req.params.id,
       }
     });
 
@@ -86,16 +86,18 @@ exports.getDrugList = async (req, reply) => {
 
 exports.getDrugWithFilter = async (req, reply) => {
   try {
+    let idsQuery;
     if(req.query.ids && req.query.ids.length > 0){
-      req.query.drugId = {
+      idsQuery = {
         $in: req.query.ids,
       }
       delete req.query.ids;
     }
     const drugs = await Drug.findAll({
-      ...req.query,
+      where: req.query,
+      ...idsQuery
     });
-
+    console.log(req.query)
     return {drugs: drugs.map(x=>x.dataValues)};
   } catch (err) {
     throw boomify(err);
