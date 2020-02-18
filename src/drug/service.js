@@ -1,7 +1,7 @@
 const Drug = require('./DrugModel');
 const {boomify} = require('boom');
 
-exports.createDrug = async () => {
+exports.createDrug = async (req, reply) => {
   try {
     const drug = Drug.build(req.body.drug);
 
@@ -12,11 +12,11 @@ exports.createDrug = async () => {
   }
 };
 
-exports.deleteDrug = async () => {
+exports.deleteDrug = async (req, reply) => {
   try {
     const deletedDrugCount = await Drug.destroy({
       where: {
-        id: req.params.id,
+        drugId: req.params.id,
       },
     });
 
@@ -36,11 +36,11 @@ exports.deleteDrug = async () => {
   }
 };
 
-exports.patchDrug = async () => {
+exports.patchDrug = async (req, reply) => {
   try {
     if(Object.entries(req.body.drug).length === 0){
       const drug = await Drug.findOne({where: {
-        id: req.params.id,
+        drugId: req.params.id,
       }});
 
       return {drug: drug.dataValues}
@@ -50,7 +50,7 @@ exports.patchDrug = async () => {
       req.body.drug,
       {
         where: {
-          id: req.params.id,
+          drugId: req.params.id,
         },
         individualHooks: true,
       },
@@ -64,7 +64,7 @@ exports.patchDrug = async () => {
 
     const updatedDrug = await Drug.findOne({
       where: {
-        id: req.params.id,
+        drugId: req.params.id,
       }
     });
 
@@ -74,7 +74,7 @@ exports.patchDrug = async () => {
   }
 };
 
-exports.getDrugList = async () => {
+exports.getDrugList = async (req, reply) => {
   try {
     const drugs = await Drug.findAll();
 
@@ -84,12 +84,20 @@ exports.getDrugList = async () => {
   }
 }
 
-exports.getDrugWithFilter = async () => {
+exports.getDrugWithFilter = async (req, reply) => {
   try {
+    let idsQuery;
+    if(req.query.ids && req.query.ids.length > 0){
+      idsQuery = {
+        $in: req.query.ids,
+      }
+      delete req.query.ids;
+    }
     const drugs = await Drug.findAll({
-      wheree: req.query,
+      where: req.query,
+      ...idsQuery
     });
-
+    console.log(req.query)
     return {drugs: drugs.map(x=>x.dataValues)};
   } catch (err) {
     throw boomify(err);
