@@ -8,7 +8,11 @@ const Prescribable = SequelizeInstance.define('Prescribable',  {
 		type: Sequelize.DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-	},
+  },
+  name: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false,
+  },
   dosage: {
     type: Sequelize.DataTypes.DECIMAL,
     allowNull: false,

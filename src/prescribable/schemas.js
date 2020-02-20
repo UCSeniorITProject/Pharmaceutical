@@ -26,6 +26,10 @@ const prescribableBeforeSave = {
     type: 'number',
     description: 'The id of the related drug',
   },
+  name: {
+    type: 'string',
+    description: 'The name of the prescribable',
+  },
   active: {
     type: 'string',
     enum: activeEnum,

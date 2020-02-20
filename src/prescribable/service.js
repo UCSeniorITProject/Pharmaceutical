@@ -3,6 +3,7 @@ const Prescribable = require('./PrescribableModel');
 
 exports.createPrescribable = async (req, reply) => {
   try {
+    console.log(req.body)
     const prescribable = Prescribable.build(req.body.prescribable);
 
     const savedPrescribable = await prescribable.save();
@@ -16,7 +17,7 @@ exports.deletePrescribable = async (req, reply) => {
   try {
     const prescribableDeletedCount = await Prescribable.destroy({
       where: {
-        prescriptionId: req.params.id,
+        prescribableId: req.params.id,
       },
     });
 
@@ -41,7 +42,7 @@ exports.patchPrescribable = async (req,  reply) => {
     if(Object.entries(req.body.prescribable).length === 0){
       const prescribable = await Prescribable.findOne({
         where: {
-          prescriptionId: req.params.id,
+          prescribableId: req.params.id,
         }
       });
 
@@ -52,7 +53,7 @@ exports.patchPrescribable = async (req,  reply) => {
       req.body.prescribable,
       {
         where: {
-          prescriptionId: req.params.id,
+          prescribableId: req.params.id,
         },
         individualHooks: true,
       }
@@ -66,7 +67,7 @@ exports.patchPrescribable = async (req,  reply) => {
 
     const updatedPrescribable = await Prescribable.findOne({
       where: {
-        prescriptionId: req.params.id,
+        prescribableId: req.params.id,
       },
     });
 
