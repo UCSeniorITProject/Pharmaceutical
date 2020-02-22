@@ -3,7 +3,6 @@ const Prescribable = require('./PrescribableModel');
 
 exports.createPrescribable = async (req, reply) => {
   try {
-    console.log(req.body)
     const prescribable = Prescribable.build(req.body.prescribable);
 
     const savedPrescribable = await prescribable.save();
@@ -87,7 +86,7 @@ exports.getPrescribableList = async () => {
   }
 }
 
-exports.getPrescribableWithFilter = async () => {
+exports.getPrescribableWithFilter = async (req, reply) => {
   try {
     const prescribables = await Prescribable.findAll(
       {

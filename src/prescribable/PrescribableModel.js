@@ -14,7 +14,7 @@ const Prescribable = SequelizeInstance.define('Prescribable',  {
     allowNull: false,
   },
   dosage: {
-    type: Sequelize.DataTypes.DECIMAL,
+    type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
   dosageUnit: {
@@ -34,13 +34,12 @@ const Prescribable = SequelizeInstance.define('Prescribable',  {
     },
   },
   minWeight: {
-    type: Sequelize.DataTypes.DECIMAL,
+    type: Sequelize.DataTypes.INTEGER,
     allowNull: false,
   },
   requiredGender: {
     type: Sequelize.DataTypes.STRING,
-    allowNull: false,
-    values: ['M', 'F'],
+    allowNull: true,
   },
   active: {
     type: Sequelize.DataTypes.STRING,

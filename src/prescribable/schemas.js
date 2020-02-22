@@ -19,7 +19,6 @@ const prescribableBeforeSave = {
   },
   requiredGender: {
     type: 'string',
-    enum: ['M', 'F'],
     description: 'The gender the prescribable was made for',
   },
   drugId: {
@@ -39,7 +38,7 @@ const prescribableBeforeSave = {
 
 const prescribableAfterSave = { 
   ...prescribableBeforeSave,
-  id: {
+  prescribableId: {
     type: 'number',
     description: 'The id of the prescribable',
   },
