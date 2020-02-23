@@ -17,6 +17,10 @@ const Prescribable = SequelizeInstance.define('Prescribable',  {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
+  directions: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false,
+  },
   dosageUnit: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,

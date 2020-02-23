@@ -13,6 +13,10 @@ const prescribableBeforeSave = {
     type: 'string',
     description: 'The frequency that the dose should be given in',
   },
+  directions: {
+    type: 'string',
+    description: 'How the prescribable should be taken',
+  },
   minWeight: {
     type: 'number',
     description: 'The weight, in pounds, that the patient must weight to be allowed to be prescribed',
