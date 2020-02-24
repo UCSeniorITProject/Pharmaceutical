@@ -12,6 +12,10 @@ const PrescriptionReason = SequelizeInstance.define('PrescriptionReason', {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
+  reasonCode:  {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false,
+  },
   longSummary: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,

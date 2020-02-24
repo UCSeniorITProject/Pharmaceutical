@@ -8,6 +8,10 @@ const prescriptionReasonBeforeSave = {
 	longSummary: {
 		type: 'string',
 		description: 'The long summary of the prescription reason',
+  },
+  reasonCode: {
+		type: 'string',
+		description: 'A short description of the code for the reason',
 	},
 	active: {
 		type: 'string',
