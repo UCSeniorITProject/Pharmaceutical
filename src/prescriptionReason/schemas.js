@@ -22,7 +22,7 @@ const prescriptionReasonBeforeSave = {
 
 const prescriptionReasonAfterSave = {
 	...prescriptionReasonBeforeSave,
-	prescriptionReadId: {
+	prescriptionReasonId: {
 		type: 'number',
 		description: 'The id of the prescription reason',
 	},
@@ -168,7 +168,7 @@ exports.getPrescriptionReasonWithFilter = {
       type: 'object',
       description: 'Succesfully got a list of all prescription reasons',
       properties: {
-        prescribables: {
+        prescriptionReasons: {
           type: 'array',
           items: {
             type: 'object',
@@ -190,7 +190,7 @@ exports.getPrescriptionReasonList = {
       type: 'object',
       description: 'Succesfully got a list of all prescription reasons',
       properties: {
-        prescribables: {
+        prescriptionReason: {
           type: 'array',
           items: {
             type: 'object',
