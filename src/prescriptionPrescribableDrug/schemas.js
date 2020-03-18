@@ -13,7 +13,11 @@ const prescriptionPrescribableDrugBeforeSave = {
     type: 'string',
     enum: activeEnum,
     description: 'Whether or not this prescribable is active',
-  }
+	},
+	prescriptionStartDate: {
+		type: 'string',
+		description: 'When the prescription starts',
+	}
 };
 
 const prescriptionPrescribableDrugAfterSave = {

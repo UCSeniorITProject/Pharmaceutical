@@ -1,12 +1,35 @@
 const {boomify} = require('boom');
 const PrescriptionPrescribableDrug = require('./PrescriptionPrescribableDrugModel');
-
+const Prescribable = require('../prescribable/PrescribableModel');
+const isPrescriptionDueToBeFilled = require('../helpers/isPrescriptionDueToBeFilled');
 exports.createPrescriptionPrescribableDrug = async (req, reply) => {
   try {
-    const prescriptionPrescribableDrug = PrescriptionPrescribableDrug.build(req.body.prescriptionPrescribableDrug);
-
-    const savedPrescriptionPrescribableDrug = await prescriptionPrescribableDrug.save();
-    return {prescriptionPrescribableDrug: savedPrescriptionPrescribableDrug.dataValuese};
+		const prescriptionHistory = await PrescriptionPrescribableDrug.findAll({
+			where: {
+				prescriptionStartDate: {
+					$lte: req.body.prescriptionPrescribableDrug.prescriptionStartDate
+				},
+				prescribableId: req.body.prescriptionPrescribableDrug.prescribableId,
+				patientId: req.body.prescriptionPrescribableDrug.patientId,
+			}	
+		});
+		const prescribableInfo = await Prescribable.findOne({
+			where: {
+				prescribableId: req.body.prescriptionPrescribableDrug.prescribableId,
+			}
+		});
+		const isPrescriptionFillable = isPrescriptionDueToBeFilled(prescriptionHistory.map(x => x.dataValues), prescribableInfo.map(x=>x.dataValues), req.body.prescriptionPrescribableDrug);
+		if(isPrescriptionFillable){
+			const prescriptionPrescribableDrug = PrescriptionPrescribableDrug.build(req.body.prescriptionPrescribableDrug);
+			const savedPrescriptionPrescribableDrug = await prescriptionPrescribableDrug.save();
+			return {prescriptionPrescribableDrug: savedPrescriptionPrescribableDrug.dataValuese};
+		} else {
+			return reply
+								.code(409)
+								.send({
+									msg: 'The prescribable is not due to be prescribed yet.',
+								});
+		}
   } catch (err) {
     throw boomify(err);
   }

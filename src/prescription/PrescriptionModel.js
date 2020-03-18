@@ -16,6 +16,10 @@ const Prescription = SequelizeInstance.define('Prescription',{
 			key: 'patientId',
 		},
 	},
+	numDoses : {
+		type: Sequelize.DataTypes.INTEGER,
+		allowNull: false,
+	},
 	pharmacyId: {
 		type: Sequelize.DataTypes.INTEGER,
 		allowNull: false,

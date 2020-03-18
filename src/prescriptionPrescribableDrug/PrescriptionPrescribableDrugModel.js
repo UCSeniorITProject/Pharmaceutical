@@ -23,7 +23,11 @@ const PrescriptionPrescribableDrug = SequelizeInstance.define('PrescriptionPresc
       model: 'Prescribables',
       key: 'prescribableId',
     }
-  },
+	},
+	prescriptionStartDate: {
+		type: Sequelize.DataTypes.DATE,
+		allowNull: false,
+	},
   active: {
     type: Sequelize.DataTypes.STRING,
     values: activeEnum,
