@@ -28,6 +28,11 @@ exports.createPrescriptionPrescribableDrug = async (req, reply) => {
 			const savedPrescriptionPrescribableDrug = await prescriptionPrescribableDrug.save();
 			return {prescriptionPrescribableDrug: savedPrescriptionPrescribableDrug.dataValues};
 		} else {
+			await Prescription.destroy({
+				where: {
+					prescriptionId: req.body.prescriptionPrescribableDrug.prescriptionId,
+				}
+			});
 			return reply
 								.code(409)
 								.send({
