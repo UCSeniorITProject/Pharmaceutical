@@ -1,7 +1,6 @@
 const SequelizeInstance = require('../dbConnection');
 const Sequelize = require('sequelize');
 const activeEnum = require('../constants/activeEnum');
-const config = require('../../config');
 
 const Prescribable = SequelizeInstance.define('Prescribable',  {
 	prescribableId: {

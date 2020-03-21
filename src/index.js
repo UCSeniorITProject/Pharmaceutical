@@ -6,11 +6,13 @@ const fastify = require('fastify')({
   querystringParser: str => qs.parse(str),
 });
 const swagger = require('../swagger-config');
+const createRelationships = require('./createRelationships');
 const sequelizeInstance = require('./dbConnection');
 
 (async () => {
   try {
-    fastify.register(require('fastify-swagger'), swagger.options);
+		fastify.register(require('fastify-swagger'), swagger.options);
+
 		fastify.register(require('./drug'), {prefix: '/api/'});
 		fastify.register(require('./prescribable'), {prefix: '/api'});
 		fastify.register(require('./pharmacy'), {prefix: '/api'});
@@ -20,12 +22,13 @@ const sequelizeInstance = require('./dbConnection');
 		fastify.register(require('./prescriptionPrescribableDrugReason'), {prefix: '/api'});
     sequelizeInstance.query('EXEC sp_msforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"')
       .then(function(){
-          return sequelizeInstance.sync({ force: config.db.forceTableCreation });
+					return sequelizeInstance.sync({ force: config.db.forceTableCreation });
       })
       .then(function(){
           return sequelizeInstance.query('EXEC sp_msforeachtable "ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all"')
       })
       .then(function(){
+					createRelationships();
           console.log('Database synchronised.');
       }, function(err){
           console.log(err);

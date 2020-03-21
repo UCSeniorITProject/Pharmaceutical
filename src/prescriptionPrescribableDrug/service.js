@@ -1,28 +1,32 @@
 const {boomify} = require('boom');
 const PrescriptionPrescribableDrug = require('./PrescriptionPrescribableDrugModel');
-const Prescribable = require('../prescribable/PrescribableModel');
-const isPrescriptionDueToBeFilled = require('../helpers/isPrescriptionDueToBeFilled');
+const { Op, literal } = require("sequelize");
+const Prescription = require('../prescription/PrescriptionModel');
 exports.createPrescriptionPrescribableDrug = async (req, reply) => {
   try {
 		const prescriptionHistory = await PrescriptionPrescribableDrug.findAll({
 			where: {
-				prescriptionStartDate: {
-					$lte: req.body.prescriptionPrescribableDrug.prescriptionStartDate
+				[Op.or]: {
+					prescriptionStartDate: {
+						[Op.between]:
+							[req.body.prescriptionPrescribableDrug.prescriptionStartDate,
+							req.body.prescriptionPrescribableDrug.prescriptionEndDate]
+					},
+					prescriptionEndDate: {
+						[Op.between]:
+							[req.body.prescriptionPrescribableDrug.prescriptionStartDate,
+							req.body.prescriptionPrescribableDrug.prescriptionEndDate],
+					},
 				},
 				prescribableId: req.body.prescriptionPrescribableDrug.prescribableId,
-				patientId: req.body.prescriptionPrescribableDrug.patientId,
-			}	
+				'$Prescription.patientId$': req.params.patientId,
+			},
+			include: [{model: Prescription, required: true}],	
 		});
-		const prescribableInfo = await Prescribable.findOne({
-			where: {
-				prescribableId: req.body.prescriptionPrescribableDrug.prescribableId,
-			}
-		});
-		const isPrescriptionFillable = isPrescriptionDueToBeFilled(prescriptionHistory.map(x => x.dataValues), prescribableInfo.map(x=>x.dataValues), req.body.prescriptionPrescribableDrug);
-		if(isPrescriptionFillable){
+		if(prescriptionHistory.length === 0){
 			const prescriptionPrescribableDrug = PrescriptionPrescribableDrug.build(req.body.prescriptionPrescribableDrug);
 			const savedPrescriptionPrescribableDrug = await prescriptionPrescribableDrug.save();
-			return {prescriptionPrescribableDrug: savedPrescriptionPrescribableDrug.dataValuese};
+			return {prescriptionPrescribableDrug: savedPrescriptionPrescribableDrug.dataValues};
 		} else {
 			return reply
 								.code(409)

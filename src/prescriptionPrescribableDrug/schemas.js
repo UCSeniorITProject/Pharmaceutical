@@ -8,7 +8,7 @@ const prescriptionPrescribableDrugBeforeSave = {
   prescribableId: {
     type: 'number',
     description: 'The id of the prescribable to add to this prescription',
-  },
+	},
   active: {
     type: 'string',
     enum: activeEnum,
@@ -17,6 +17,10 @@ const prescriptionPrescribableDrugBeforeSave = {
 	prescriptionStartDate: {
 		type: 'string',
 		description: 'When the prescription starts',
+	},
+	prescriptionEndDate: {
+		type: 'string',
+		description: 'When the prescription ends',
 	}
 };
 
@@ -39,7 +43,15 @@ const prescriptionPrescribableDrugAfterSave = {
 exports.createPrescriptionPrescribableDrug = {
   description: 'Creates a prescription prescribable drug with the given body',
   tags: ['PrescriptionPrescribableDrug'],
-  summary: 'Creates a prescription prescribable drug and applies the given body',
+	summary: 'Creates a prescription prescribable drug and applies the given body',
+	params: {
+		type: 'object',
+		properties: {
+			patientId: {
+				type: 'string',
+			},
+		},
+	},
   body: {
     type: 'object',
     description: 'The prescription prescribable drug to create',

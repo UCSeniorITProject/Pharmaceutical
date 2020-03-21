@@ -15,7 +15,7 @@ const PrescriptionPrescribableDrug = SequelizeInstance.define('PrescriptionPresc
       model: 'Prescriptions',
       key: 'prescriptionId',
     }
-  },
+	},
   prescribableId: {
     type: Sequelize.DataTypes.INTEGER,
     allowNull: false,
@@ -25,6 +25,10 @@ const PrescriptionPrescribableDrug = SequelizeInstance.define('PrescriptionPresc
     }
 	},
 	prescriptionStartDate: {
+		type: Sequelize.DataTypes.DATE,
+		allowNull: false,
+	},
+	prescriptionEndDate: {
 		type: Sequelize.DataTypes.DATE,
 		allowNull: false,
 	},
