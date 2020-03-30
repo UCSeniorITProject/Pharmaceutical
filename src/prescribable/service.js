@@ -1,6 +1,8 @@
 const {boomify} = require('boom');
 const Prescribable = require('./PrescribableModel');
-
+const sequelize = require('../dbConnection');
+const {QueryTypes} = require('sequelize');
+const moment = require('moment');
 exports.createPrescribable = async (req, reply) => {
   try {
     const prescribable = Prescribable.build(req.body.prescribable);
@@ -98,4 +100,40 @@ exports.getPrescribableWithFilter = async (req, reply) => {
   } catch (err) {
     throw boomify(err);
   }
+};
+
+exports.getNumPrescribablesPerMonth = async (req, reply) => {
+	try {
+		const prescribablesPerMonth = await sequelize.query(
+			`
+				DECLARE @StartDate DATETIME2, @EndDate DATETIME2;
+
+				SELECT @StartDate = :lastYearRolling, @EndDate = :today;
+
+				;WITH d(d) AS
+				(
+						SELECT DATEADD(MONTH, n, DATEADD(MONTH, DATEDIFF(MONTH, 0, @StartDate), 0))
+						FROM ( SELECT TOP (DATEDIFF(MONTH, @StartDate, @EndDate) + 1)
+								n = ROW_NUMBER() OVER (ORDER BY [object_id]) - 1
+								FROM sys.all_objects ORDER BY [object_id] ) AS n
+				)
+				SELECT
+								createdAt = DATENAME(MONTH, d.d) + ' ' + cast(YEAR(d.d) as nvarchar),
+								numPrescribables = COUNT(p.prescriptionId)
+				FROM d LEFT JOIN dbo.PrescriptionPrescribableDrugs AS p
+						ON p.createdAt >= d.d and p.createdAt <= DATEADD(MONTH, 1, d.d)
+				LEFT JOIN Prescriptions pp on pp.prescriptionId = p.prescriptionId and pp.patientId=:patientId
+				GROUP BY d.d
+				ORDER BY d.d;
+			`,
+			{
+				replacements: {patientId: req.params.patientId, lastYearRolling: moment().subtract(1, 'year').toDate(), today: moment().toDate()},
+				type: QueryTypes.SELECT,
+			}
+		);
+
+		return {data: prescribablesPerMonth};
+	} catch (err){
+		throw boomify(err)
+	}
 }

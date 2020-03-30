@@ -36,6 +36,92 @@ const prescriptionReasonAfterSave = {
 	},
 };
 
+exports.getPrescriptionReasonCount = {
+	description: 'Gets a count of the prescription reason',
+	tags: ['PrescriptionReason'],
+	summary: 'Gets a count of the prescription reason',
+	exposeRoute: true,
+	params: {
+    type: 'object',
+    required: ['patientId'],
+    properties: {
+      patientId: {
+        type: 'number',
+        description: 'The ID of the prescription to delete',
+      }
+    },
+	},
+	response: {
+		200: {
+			description: 'The list of prescription reason count',
+			type: 'object',
+			properties: {
+				data: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							reasonCode: {
+								type: 'string',
+								description: 'The code for the reason',
+							},
+							numReason: {
+								type: 'string',
+								description: 'The number of the prescription reason',
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+exports.getPrescriptionReasonByPrescribable = {
+	description: 'Gets a count of prescribables prescribed by reason',
+	tags: ['PrescriptionReason'],
+	summary: 'Gets a count of prescribables prescribed by reason',
+	exposeRoute: true,
+	params: {
+    type: 'object',
+    required: ['patientId'],
+    properties: {
+      patientId: {
+        type: 'number',
+        description: 'The ID of the prescription to delete',
+      }
+    },
+	},
+	response: {
+		200: {
+			description: 'The list of prescribables by reason code',
+			type: 'object',
+			properties: {
+				data: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							reasonCode: {
+								type: 'string',
+								description: 'The reason for the prescription',
+							},
+							prescribableName: {
+								type: 'string',
+								description: 'The name of the prescribable',
+							},
+							numPrescriptions: {
+								type: 'number',
+								description: 'The number of times it was prescribed',
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 exports.createPrescriptionReason = {
   description: 'Creates a prescription reason with the given body',
   tags: ['PrescriptionReason'],

@@ -1,7 +1,11 @@
 const {boomify} = require('boom');
 const PrescriptionPrescribableDrug = require('./PrescriptionPrescribableDrugModel');
-const { Op, literal } = require("sequelize");
+const { Op } = require("sequelize");
 const Prescription = require('../prescription/PrescriptionModel');
+const sequelize = require('../dbConnection');
+const moment = require('moment');
+const {QueryTypes} = require('sequelize');
+
 exports.createPrescriptionPrescribableDrug = async (req, reply) => {
   try {
 		const prescriptionHistory = await PrescriptionPrescribableDrug.findAll({
@@ -44,6 +48,26 @@ exports.createPrescriptionPrescribableDrug = async (req, reply) => {
   }
 };
 
+exports.getPrescriptionPrescribableDrugCountForLastYear = async (req, reply) => {
+	try {
+		const prescriptionPrescribableDrugCount = await sequelize.query(
+		`
+			SELECT count(ppd.prescriptionId) as prescriptionCount, pp.name as prescribableName FROM PrescriptionPrescribableDrugs ppd
+			JOIN Prescribables pp on pp.prescribableId = ppd.prescribableId
+			JOIN Prescriptions p on p.prescriptionId = ppd.prescriptionId
+			WHERE ppd.createdAt between :lastYearRolling and :today and p.patientId = :patientId
+			GROUP BY pp.name
+		`, 
+		{
+			replacements: {patientId: req.params.patientId, lastYearRolling: moment().subtract(1, 'year').toDate(), today: moment().toDate()},
+			type: QueryTypes.SELECT,
+		});
+		return {data: prescriptionPrescribableDrugCount};
+	} catch (err){
+		throw boomify(err);
+	}
+}
+
 exports.deletePrescriptionPrescribableDrug = async (req, reply) =>  {
   try {
     const prescriptionPrescribableDrugDeletedCount = await PrescriptionPrescribableDrug.destroy({
@@ -66,6 +90,28 @@ exports.deletePrescriptionPrescribableDrug = async (req, reply) =>  {
   } catch (err){
     throw boomify(err);
   }
+};
+
+exports.getCountOfPrescribablesPerDoctor = async (req, reply) => {
+	try {
+		const prescribablesPerDoctor = await sequelize.query(
+			`
+				SELECT count(ppd.createdAt) as numPrescriptions, 'Dr. ' + u.lastName as doctorName FROM PrescriptionPrescribableDrugs ppd
+					JOIN Prescriptions p on p.prescriptionId = ppd.prescriptionId and p.patientId = :patientId
+					JOIN Users u on u.id = p.doctorId
+					WHERE p.createdAt between :lastYearRolling and :today
+					GROUP BY u.lastName;
+			`,
+			{
+				replacements: {patientId: req.params.patientId, lastYearRolling: moment().subtract(1, 'year').toDate(), today: moment().toDate()},
+				type: QueryTypes.SELECT,
+			}
+		);
+
+		return {data: prescribablesPerDoctor};
+	} catch (err) {
+		throw boomify(err);
+	}
 };
 
 exports.patchPrescriptionPrescribableDrug = async (req, reply) =>  {

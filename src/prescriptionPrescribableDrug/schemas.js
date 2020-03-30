@@ -40,6 +40,45 @@ const prescriptionPrescribableDrugAfterSave = {
   },
 };
 
+exports.getCountOfPrescribablesPerDoctor = {
+	description: 'Gets a count of prescribables for doctor for patient',
+	tags: ['PrescriptionPrescribableDrug'],
+	summary: 'Gets a count of prescribables for doctor for patient',
+	params: {
+		type: 'object',
+		properties: {
+			patientId: {
+				type: 'string',
+			},
+		},
+	},
+	exposeRoute: true,
+	response: {
+		200: {
+			description: 'The count of prescribable per doctor',
+			type: 'object',
+			properties: {
+				data: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							doctorName: {
+								type: 'string',
+								description: 'The name of the doctor',
+							},
+							numPrescriptions: {
+								type: 'number',
+								description: 'The number of prescriptions',
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 exports.createPrescriptionPrescribableDrug = {
   description: 'Creates a prescription prescribable drug with the given body',
   tags: ['PrescriptionPrescribableDrug'],
@@ -164,6 +203,47 @@ exports.patchPrescriptionPrescribableDrug = {
       }, 
     },
   },
+};
+
+exports.getPrescriptionPrescribableDrugCountForLastYear = {
+	description: 'Gets all of the prescribables by count for the last year',
+	tags: ['PrescriptionPrescribableDrug'],
+	summary: 'Gets all of the prescribables by count for the last year',
+	exposeRoute: true,
+	params: {
+    type: 'object',
+    required: ['patientId'],
+    properties: {
+      patientId: {
+        type: 'number',
+        description: 'The ID of the prescription to delete',
+      }
+    },
+	},
+	response: {
+		200: {
+			description: 'Successfully got the count of prescribables for the last year',
+			type: 'object',
+			properties: {
+				data: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							prescribableName: {
+								type: 'string',
+								description: 'The name of the prescribable',
+							},
+							prescriptionCount: {
+								type: 'number',
+								description: 'The number of the prescribables',
+							},
+						},
+					},
+				},
+			},
+		},
+	},
 };
 
 exports.getPrescriptionPrescribableDrugWithFilter = {

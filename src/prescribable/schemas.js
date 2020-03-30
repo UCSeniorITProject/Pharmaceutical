@@ -56,6 +56,49 @@ const prescribableAfterSave = {
   }
 };
 
+
+exports.prescribableBeforeSave = prescribableBeforeSave;
+exports.prescribableAfterSave = prescribableAfterSave;
+
+exports.getNumPrescribablesPerMonth = {
+	description: 'Get number of prescribables for month',
+	tags: ['Prescribable'],
+	summary: 'Get number of prescribables for month',
+	params: {
+    type: 'object',
+    required: ['patientId'],
+    properties: {
+      patientId: {
+        type: 'number',
+        description: 'The ID of the prescription to delete',
+      }
+    },
+	},
+	exposeRoute: true,
+	response: {
+		200: {
+			description: 'The count of prescribable per doctor',
+			type: 'object',
+			properties: {
+				data: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							createdAt: {
+								type: 'string',
+							},
+							numPrescribables: {
+								type: 'number',
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 exports.createPrescribable = {
   description: 'Creates a prescribable with the given body',
   tags: ['Prescribable'],
