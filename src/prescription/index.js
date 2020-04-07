@@ -7,5 +7,6 @@ module.exports = (fastify, options, next) => {
   fastify.patch('/prescription/:id', {schema: prescriptionSchema.deletePrescription}, prescriptionService.deletePrescription);
 	fastify.get('/prescription', {schema: prescriptionSchema.prescriptionWithFilter}, prescriptionService.getPrescriptionWithFilter);
 	fastify.get('/prescription/:patientId/month', {schema: prescriptionSchema.getPrescriptionsByMonthForPatient}, prescriptionService.getPrescriptionsAggregatedByMonthForYear);
-  next();
+	fastify.get('/prescription/doctor/:doctorId/month', {schema: prescriptionSchema.getPrescriptionsByMonthForDoctor}, prescriptionService.getNumPrescriptionsPerMonthByDoctor);
+	next();
 };

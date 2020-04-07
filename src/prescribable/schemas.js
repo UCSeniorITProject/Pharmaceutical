@@ -264,3 +264,121 @@ exports.getPrescribableWithFilter = {
     },
   }
 };
+
+exports.getPrescribableBreakDownByDoctor = {
+	description: 'Gets the breakdown of prescribables by doctor',
+	tags: ['Prescribable'],
+	summary: 'Grabs the breakdown of the prescribables that match the filter',
+	params: {
+    type: 'object',
+    required: ['doctorId'],
+    properties: {
+      doctorId: {
+        type: 'number',
+        description: 'The ID of the doctor to query by',
+      }
+    },
+	},
+	exposeRoute: true,
+	response: {
+		200: {
+			description: 'The count of prescribable per doctor',
+			type: 'object',
+			properties: {
+				data: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							prescribableName: {
+								type: 'string',
+							},
+							numPrescribables: {
+								type: 'number',
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+
+exports.getPrescribableBreakdownByPatientForDoctor = {
+	description: 'Gets the breakdown of prescribables by patient for the doctor',
+	tags: ['Prescribable'],
+	summary: 'Gets the breakdown of prescribables by patient for the doctor',
+	params: {
+    type: 'object',
+    required: ['doctorId'],
+    properties: {
+      doctorId: {
+        type: 'number',
+        description: 'The ID of the doctor to query by',
+      }
+    },
+	},
+	exposeRoute: true,
+	response: {
+		200: {
+			description: 'The count of prescribable per patient for the doctor',
+			type: 'object',
+			properties: {
+				data: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							patientName: {
+								type: 'string',
+							},
+							numPrescribables: {
+								type: 'number',
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+exports.getNumPrescribablesPerMonthForDoctor = {
+	description: 'Get number of prescribables for month',
+	tags: ['Prescribable'],
+	summary: 'Get number of prescribables for month',
+	params: {
+    type: 'object',
+    required: ['doctorId'],
+    properties: {
+      doctorId: {
+        type: 'number',
+        description: 'The ID of the prescription to delete',
+      }
+    },
+	},
+	exposeRoute: true,
+	response: {
+		200: {
+			description: 'The count of prescribable per doctor',
+			type: 'object',
+			properties: {
+				data: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							createdAt: {
+								type: 'string',
+							},
+							numPrescribables: {
+								type: 'number',
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};

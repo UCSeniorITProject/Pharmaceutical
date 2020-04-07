@@ -6,5 +6,6 @@ module.exports = (fastify, options, next) => {
 	fastify.delete('/prescription-prescribable-drug-reason/:id', {schema: prescriptionPrescribableDrugReasonSchema.deletePrescriptionPrescribableDrugReason}, prescriptionPrescribableDrugReasonService.deletePrescriptionPrescribableDrugReason);
 	fastify.patch('/prescription-prescribable-drug-reason/:id', {schema: prescriptionPrescribableDrugReasonSchema.patchPrescriptionPrescribableDrugReason}, prescriptionPrescribableDrugReasonService.patchPrescriptionPrescribableDrugReason);
 	fastify.get('/prescription-prescribable-drug-reason', {schema: prescriptionPrescribableDrugReasonSchema.getPrescriptionPrescribableDrugReasonWithFilter}, prescriptionPrescribableDrugReasonService.getPrescriptionPrescribableDrugReasonWithFilter);
+	fastify.get('/prescription-prescribable-drug-reason/doctor/:doctorId/breakdown', {schema: prescriptionPrescribableDrugReasonSchema.getReasonBreakdownByDoctor}, prescriptionPrescribableDrugReasonService.getReasonBreakdownByDoctor);
 	next();
 };

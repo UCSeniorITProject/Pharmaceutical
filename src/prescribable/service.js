@@ -102,6 +102,28 @@ exports.getPrescribableWithFilter = async (req, reply) => {
   }
 };
 
+exports.getPrescribableBreakdownByDoctor = async (req, reply) => {
+ try {
+	const prescribableBreakdown = await sequelize.query(
+		`
+			SELECT count(ppd.prescribableId) as numPrescribables, P.name as prescribableName FROM Prescriptions ps
+				JOIN PrescriptionPrescribableDrugs PPD on ps.prescriptionId = PPD.prescriptionId and ps.doctorId = :doctorId
+				JOIN Prescribables P on PPD.prescribableId = P.prescribableId
+				WHERE ps.createdAt between :startDate and :endDate
+				GROUP BY P.name;
+		`,
+		{
+			replacements: {doctorId: req.params.doctorId, startDate: moment().subtract(1, 'year').toDate(), endDate: moment().toDate()},
+			type: QueryTypes.SELECT,
+		}
+	);
+
+	return {data: prescribableBreakdown};
+ } catch (err) {
+	 throw boomify(err);
+ }
+};
+
 exports.getNumPrescribablesPerMonth = async (req, reply) => {
 	try {
 		const prescribablesPerMonth = await sequelize.query(
@@ -137,3 +159,61 @@ exports.getNumPrescribablesPerMonth = async (req, reply) => {
 		throw boomify(err)
 	}
 }
+
+exports.getPrescribableBreakdownByPatientForDoctor = async (req, reply) => {
+	try {
+		const prescribablesByPatient = await sequelize.query(
+			`
+				SELECT u.firstName + ' ' + u.lastName as patientName, count(PPD.prescribableId) as numPrescribables FROM PrescriptionPrescribableDrugs PPD
+					JOIN Prescriptions P on PPD.prescriptionId = P.prescriptionId and P.doctorId = :doctorId
+					JOIN Patients P2 on P.patientId = P2.patientId
+					JOIN Users U on P2.patientUserId = U.id
+					WHERE P.createdAt between :startDate and :endDate
+					GROUP BY U.firstName, U.lastName;
+			`,
+			{
+				replacements: {doctorId: req.params.doctorId, startDate: moment().subtract(1, 'year').toDate(), endDate: moment().toDate()},
+				type: QueryTypes.SELECT,
+			}
+		);
+
+		return {data: prescribablesByPatient};
+	} catch (err) {
+		throw boomify(err);
+	}
+};
+
+exports.getNumPrescribablesPerMonthForDoctor = async (req, reply) => {
+	try {
+		const numberOfPrescribablesPerMonth = await sequelize.query(
+			`
+				DECLARE @StartDate DATETIME2, @EndDate DATETIME2;
+
+				SELECT @StartDate = :lastYearRolling, @EndDate = :today;
+
+				;WITH d(d) AS
+				(
+						SELECT DATEADD(MONTH, n, DATEADD(MONTH, DATEDIFF(MONTH, 0, @StartDate), 0))
+						FROM ( SELECT TOP (DATEDIFF(MONTH, @StartDate, @EndDate) + 1)
+								n = ROW_NUMBER() OVER (ORDER BY [object_id]) - 1
+								FROM sys.all_objects ORDER BY [object_id] ) AS n
+				)
+				SELECT
+								createdAt = DATENAME(MONTH, d.d) + ' ' + cast(YEAR(d.d) as nvarchar),
+								numPrescribables = COUNT(p.prescriptionId)
+				FROM d LEFT JOIN dbo.PrescriptionPrescribableDrugs AS p
+						ON p.createdAt >= d.d and p.createdAt <= DATEADD(MONTH, 1, d.d)
+				LEFT JOIN Prescriptions pp on pp.prescriptionId = p.prescriptionId and pp.doctorId=:doctorId
+				GROUP BY d.d
+				ORDER BY d.d;
+			`,
+			{
+				replacements: {doctorId: req.params.doctorId, lastYearRolling: moment().subtract(1, 'year').toDate(), today: moment().toDate()},
+				type: QueryTypes.SELECT,
+			}
+		);
+		return {data: numberOfPrescribablesPerMonth};
+	} catch (err) {
+		throw boomify(err);
+	}
+};

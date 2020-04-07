@@ -8,25 +8,36 @@ const {QueryTypes} = require('sequelize');
 
 exports.createPrescriptionPrescribableDrug = async (req, reply) => {
   try {
-		const prescriptionHistory = await PrescriptionPrescribableDrug.findAll({
-			where: {
-				[Op.or]: {
-					prescriptionStartDate: {
-						[Op.between]:
-							[req.body.prescriptionPrescribableDrug.prescriptionStartDate,
-							req.body.prescriptionPrescribableDrug.prescriptionEndDate]
-					},
-					prescriptionEndDate: {
-						[Op.between]:
-							[req.body.prescriptionPrescribableDrug.prescriptionStartDate,
-							req.body.prescriptionPrescribableDrug.prescriptionEndDate],
-					},
-				},
-				prescribableId: req.body.prescriptionPrescribableDrug.prescribableId,
-				'$Prescription.patientId$': req.params.patientId,
-			},
-			include: [{model: Prescription, required: true}],	
-		});
+		const prescriptionHistory = await sequelize.query(
+			`
+				SELECT [PrescriptionPrescribableDrug].[prescriptionPrescribableDrugId],
+					[PrescriptionPrescribableDrug].[prescriptionId],
+					[PrescriptionPrescribableDrug].[prescribableId],
+					[PrescriptionPrescribableDrug].[prescriptionStartDate],
+					[PrescriptionPrescribableDrug].[prescriptionEndDate],
+					[PrescriptionPrescribableDrug].[active],
+					[PrescriptionPrescribableDrug].[createdAt],
+					[PrescriptionPrescribableDrug].[updatedAt],
+					[Prescription].[prescriptionId] AS [Prescription.prescriptionId],
+					[Prescription].[patientId]      AS [Prescription.patientId],
+					[Prescription].[pharmacyId]     AS [Prescription.pharmacyId],
+					[Prescription].[doctorId]       AS [Prescription.doctorId],
+					[Prescription].[active]         AS [Prescription.active],
+					[Prescription].[createdAt]      AS [Prescription.createdAt],
+					[Prescription].[updatedAt]      AS [Prescription.updatedAt]
+				FROM [PrescriptionPrescribableDrugs] AS [PrescriptionPrescribableDrug]
+								INNER JOIN [Prescriptions] AS [Prescription]
+														ON [PrescriptionPrescribableDrug].[prescriptionId] = [Prescription].[prescriptionId]
+				WHERE [PrescriptionPrescribableDrug].[prescriptionStartDate] <= :startDate AND [PrescriptionPrescribableDrug].[prescriptionEndDate] >= :endDate
+					AND [PrescriptionPrescribableDrug].[prescribableId] = 1
+					AND [Prescription].[patientId] = :patientId;
+			`,
+			{
+				replacements: {patientId: req.params.patientId, startDate: req.body.prescriptionPrescribableDrug.prescriptionStartDate, endDate: req.body.prescriptionPrescribableDrug.prescriptionEndDate},
+				type: QueryTypes.SELECT,
+			}
+		);
+``
 		if(prescriptionHistory.length === 0){
 			const prescriptionPrescribableDrug = PrescriptionPrescribableDrug.build(req.body.prescriptionPrescribableDrug);
 			const savedPrescriptionPrescribableDrug = await prescriptionPrescribableDrug.save();

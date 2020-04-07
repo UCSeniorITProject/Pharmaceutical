@@ -81,6 +81,47 @@ exports.getPrescriptionsByMonthForPatient = {
 	},
 };
 
+exports.getPrescriptionsByMonthForDoctor = {
+	description: 'Gets the list of prescriptions by month for the doctor',
+	tags: ['Prescription'],
+	summary: 'Gets the list of prescriptions by month for the doctor',
+	exposeRoute: true,
+	params: {
+    type: 'object',
+    required: ['doctorId'],
+    properties: {
+      doctorId: {
+        type: 'number',
+        description: 'The ID of the doctor',
+      }
+    },
+  },
+	response: {
+		200: {
+			description: 'The list of the prescriptions by month',
+			type: 'object',
+			properties: {
+				data: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							createdAt: {
+								type: 'string',
+								description: 'The grouped by aggregate date of the prescriptions by month'
+							},
+							numPrescriptions: {
+								type: 'number',
+								description: 'The number of prescriptions in that specific month',
+							}
+						}
+					}
+				},
+			},
+		},
+	},
+};
+
 exports.createPrescription = {
   description: 'Creates a prescription with the given body',
   tags: ['Prescription'],

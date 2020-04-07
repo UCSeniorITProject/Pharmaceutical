@@ -174,3 +174,41 @@ exports.getPrescriptionPrescribableDrugReasonWithFilter = {
     },
   },
 };
+
+exports.getReasonBreakdownByDoctor = {
+	description: 'Gets the breakdown of prescribable reasons by doctor',
+	tags: ['Prescribable'],
+	summary: 'Gets the breakdown of prescribable reasons by doctor',
+	params: {
+    type: 'object',
+    required: ['doctorId'],
+    properties: {
+      doctorId: {
+        type: 'number',
+        description: 'The ID of the doctor to query by',
+      }
+    },
+	},
+	exposeRoute: true,
+	response: {
+		200: {
+			type: 'object',
+			properties: {
+				data: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							numPrescribableReason: {
+								type: 'number',
+							},
+							prescribableReasonName: {
+								type: 'string',
+							}
+						},
+					},
+				}
+			},
+		},
+	},
+};

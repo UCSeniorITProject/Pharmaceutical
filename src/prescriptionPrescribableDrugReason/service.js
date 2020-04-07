@@ -1,6 +1,8 @@
 const {boomify} = require('boom');
 const PrescriptionPrescribableDrugReason = require('./PrescriptionPrescribableDrugReason');
-
+const sequelize = require('../dbConnection');
+const {QueryTypes} = require('sequelize');
+const moment = require('moment');
 exports.createPrescriptionPrescribableDrugReason = async (req, reply) => {
 	try {
 		const prescriptionPrescribableDrugReason = PrescriptionPrescribableDrugReason.build(req.body.prescriptionPrescribableDrugReason);
@@ -11,6 +13,30 @@ exports.createPrescriptionPrescribableDrugReason = async (req, reply) => {
 		throw boomify(err);
 	}
 };
+
+exports.getReasonBreakdownByDoctor = async (req, reply) => {
+	try {
+		const reasonBreakdown = await sequelize.query(
+			`
+				SELECT count(PPDR.prescriptionReasonId) as numPrescribableReason, PR.reasonCode as prescribableReasonName FROM Prescriptions PS
+					JOIN PrescriptionPrescribableDrugs PPD on PS.prescriptionId = PPD.prescriptionId AND PS.doctorId = :doctorId
+					JOIN PrescriptionPrescribableDrugReasons PPDR on PPD.prescriptionPrescribableDrugId = PPDR.prescriptionPrescribableDrugId
+					JOIN PrescriptionReasons PR on PR.prescriptionReasonId = PPDR.prescriptionReasonId
+					WHERE PS.createdAt between :startDate and :endDate
+					GROUP BY PR.reasonCode;
+			`,
+			{
+				replacements: {doctorId: req.params.doctorId, startDate: moment().subtract(1, 'year').toDate(), endDate: moment().toDate()},
+				type: QueryTypes.SELECT,
+			}
+		);
+
+		return {data: reasonBreakdown};
+	} catch (err) {
+		throw boomify(err);
+	}
+};
+
 
 exports.deletePrescriptionPrescribableDrugReason = async (req, reply) => {
 	try {

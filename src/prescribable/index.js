@@ -8,5 +8,8 @@ module.exports = (fastify, options, next) => {
   fastify.get('/prescribable/list', {schema: prescribableSchema.getPrescribableList}, prescribableService.getPrescribableList);
 	fastify.get('/prescribable', {schema: prescribableSchema.getPrescribableWithFilter}, prescribableService.getPrescribableWithFilter);
 	fastify.get('/prescribable/:patientId/by-month', {schema: prescribableSchema.getNumPrescribablesPerMonth}, prescribableService.getNumPrescribablesPerMonth);
-  next();
+	fastify.get('/prescribable/doctor/:doctorId/by-month', {schema: prescribableSchema.getPrescribableBreakDownByDoctor}, prescribableService.getPrescribableBreakdownByDoctor);
+	fastify.get('/prescribable/doctor/:doctorId/patient/breakdown', {schema: prescribableSchema.getPrescribableBreakdownByPatientForDoctor}, prescribableService.getPrescribableBreakdownByPatientForDoctor)
+	fastify.get('/prescribable/doctor/:doctorId/breakdown/by-month', {schema: prescribableSchema.getNumPrescribablesPerMonthForDoctor}, prescribableService.getNumPrescribablesPerMonthForDoctor);
+	next();
 }
