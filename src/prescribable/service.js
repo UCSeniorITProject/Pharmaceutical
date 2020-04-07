@@ -134,17 +134,17 @@ exports.getNumPrescribablesPerMonth = async (req, reply) => {
 
 				;WITH d(d) AS
 				(
-						SELECT DATEADD(MONTH, n, DATEADD(MONTH, DATEDIFF(MONTH, 0, @StartDate), 0))
-						FROM ( SELECT TOP (DATEDIFF(MONTH, @StartDate, @EndDate) + 1)
-								n = ROW_NUMBER() OVER (ORDER BY [object_id]) - 1
-								FROM sys.all_objects ORDER BY [object_id] ) AS n
+												SELECT DATEADD(MONTH, n, DATEADD(MONTH, DATEDIFF(MONTH, 0, @StartDate), 0))
+												FROM ( SELECT TOP (DATEDIFF(MONTH, @StartDate, @EndDate) + 1)
+																				n = ROW_NUMBER() OVER (ORDER BY [object_id]) - 1
+																				FROM sys.all_objects ORDER BY [object_id] ) AS n
 				)
 				SELECT
-								createdAt = DATENAME(MONTH, d.d) + ' ' + cast(YEAR(d.d) as nvarchar),
-								numPrescribables = COUNT(p.prescriptionId)
-				FROM d LEFT JOIN dbo.PrescriptionPrescribableDrugs AS p
-						ON p.createdAt >= d.d and p.createdAt <= DATEADD(MONTH, 1, d.d)
-				LEFT JOIN Prescriptions pp on pp.prescriptionId = p.prescriptionId and pp.patientId=:patientId
+																				createdAt = DATENAME(MONTH, d.d) + ' ' + cast(YEAR(d.d) as nvarchar),
+																				numPrescribables = COUNT(p.prescriptionId)
+				FROM d LEFT JOIN dbo.Prescriptions AS p
+												ON p.createdAt >= d.d and p.createdAt <= DATEADD(MONTH, 1, d.d) and p.patientId=:patientId
+				LEFT JOIN PrescriptionPrescribableDrugs pp on pp.prescriptionId = p.prescriptionId
 				GROUP BY d.d
 				ORDER BY d.d;
 			`,
@@ -193,17 +193,17 @@ exports.getNumPrescribablesPerMonthForDoctor = async (req, reply) => {
 
 				;WITH d(d) AS
 				(
-						SELECT DATEADD(MONTH, n, DATEADD(MONTH, DATEDIFF(MONTH, 0, @StartDate), 0))
-						FROM ( SELECT TOP (DATEDIFF(MONTH, @StartDate, @EndDate) + 1)
-								n = ROW_NUMBER() OVER (ORDER BY [object_id]) - 1
-								FROM sys.all_objects ORDER BY [object_id] ) AS n
+												SELECT DATEADD(MONTH, n, DATEADD(MONTH, DATEDIFF(MONTH, 0, @StartDate), 0))
+												FROM ( SELECT TOP (DATEDIFF(MONTH, @StartDate, @EndDate) + 1)
+																				n = ROW_NUMBER() OVER (ORDER BY [object_id]) - 1
+																				FROM sys.all_objects ORDER BY [object_id] ) AS n
 				)
 				SELECT
-								createdAt = DATENAME(MONTH, d.d) + ' ' + cast(YEAR(d.d) as nvarchar),
-								numPrescribables = COUNT(p.prescriptionId)
-				FROM d LEFT JOIN dbo.PrescriptionPrescribableDrugs AS p
-						ON p.createdAt >= d.d and p.createdAt <= DATEADD(MONTH, 1, d.d)
-				LEFT JOIN Prescriptions pp on pp.prescriptionId = p.prescriptionId and pp.doctorId=:doctorId
+																				createdAt = DATENAME(MONTH, d.d) + ' ' + cast(YEAR(d.d) as nvarchar),
+																				numPrescribables = COUNT(p.prescriptionId)
+				FROM d LEFT JOIN dbo.Prescriptions AS p
+												ON p.createdAt >= d.d and p.createdAt <= DATEADD(MONTH, 1, d.d) and p.doctorId=:doctorId
+				LEFT JOIN PrescriptionPrescribableDrugs pp on pp.prescriptionId = p.prescriptionId
 				GROUP BY d.d
 				ORDER BY d.d;
 			`,
