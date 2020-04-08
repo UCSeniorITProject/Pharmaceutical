@@ -65,14 +65,14 @@ exports.getPrescribablesAggregatedByReason = async (req, reply) => {
 	try {
 		const prescribableByReason = await sequelize.query(
 			`
-			SELECT COUNT(p.prescribableId) as numPrescriptions, prs.reasonCode, MAX(p.name) as prescribableName  FROM PrescriptionPrescribableDrugReasons ppdr
-				JOIN PrescriptionReasons prs on prs.prescriptionReasonId = ppdr.prescriptionReasonId
-				JOIN PrescriptionPrescribableDrugs ppd on ppdr.prescriptionPrescribableDrugId = ppd.prescriptionPrescribableDrugId
-				JOIN Prescriptions pr on pr.prescriptionId = ppd.prescriptionId
-				JOIN Prescribables p on ppd.prescribableId = ppd.prescribableId
-				WHERE PatientId = :patientId and ppdr.createdAt between :lastYearRolling and :today
-				GROUP BY prs.reasonCode
-				ORDER BY numPrescriptions;
+			SELECT COUNT(ppd.prescribableId) as numPrescriptions, PR.reasonCode, p2.name as prescribableName
+				FROM PrescriptionPrescribableDrugs ppd
+				JOIN Prescriptions P on ppd.prescriptionId = P.prescriptionId and P.createdAt between :lastYearRolling and :today
+				JOIN PrescriptionPrescribableDrugReasons PPDR on ppd.prescriptionPrescribableDrugId = PPDR.prescriptionPrescribableDrugId
+				JOIN Prescribables P2 on ppd.prescribableId = P2.prescribableId
+				JOIN PrescriptionReasons PR on PPDR.prescriptionReasonId = PR.prescriptionReasonId
+				WHERE P.patientId = :patientId
+				group by PR.reasonCode, p2.name
 			`,
 			{
 				replacements: {patientId: req.params.patientId, lastYearRolling: moment().subtract(1, 'year').toDate(), today: moment().toDate()},
