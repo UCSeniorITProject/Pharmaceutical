@@ -29,11 +29,11 @@ exports.createPrescriptionPrescribableDrug = async (req, reply) => {
 								INNER JOIN [Prescriptions] AS [Prescription]
 														ON [PrescriptionPrescribableDrug].[prescriptionId] = [Prescription].[prescriptionId]
 				WHERE [PrescriptionPrescribableDrug].[prescriptionStartDate] <= :startDate AND [PrescriptionPrescribableDrug].[prescriptionEndDate] >= :endDate
-					AND [PrescriptionPrescribableDrug].[prescribableId] = 1
+					AND [PrescriptionPrescribableDrug].[prescribableId] = :prescribableId
 					AND [Prescription].[patientId] = :patientId;
 			`,
 			{
-				replacements: {patientId: req.params.patientId, startDate: req.body.prescriptionPrescribableDrug.prescriptionStartDate, endDate: req.body.prescriptionPrescribableDrug.prescriptionEndDate},
+				replacements: {patientId: req.params.patientId, startDate: req.body.prescriptionPrescribableDrug.prescriptionStartDate, endDate: req.body.prescriptionPrescribableDrug.prescriptionEndDate, prescribableId: req.body.prescriptionPrescribableDrug.prescribableId},
 				type: QueryTypes.SELECT,
 			}
 		);
