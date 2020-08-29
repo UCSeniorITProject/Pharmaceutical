@@ -97,7 +97,7 @@ exports.getDrugWithFilter = async (req, reply) => {
       where: req.query,
       ...idsQuery
     });
-    console.log(req.query)
+
     return {drugs: drugs.map(x=>x.dataValues)};
   } catch (err) {
     throw boomify(err);

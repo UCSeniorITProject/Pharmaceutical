@@ -14,7 +14,7 @@ const drugBeforeSave = {
     description: 'The parent ID of the drug if it is generic',
   },
   federalDrugIdentifier: {
-    type: 'string',
+    type: 'number',
     description: 'The ID of the drug on the federal level',
   },
   active: {

@@ -12,7 +12,7 @@ const Prescription = SequelizeInstance.define('Prescription',{
 		type: Sequelize.DataTypes.INTEGER,
 		allowNull: false,
 		references: {
-			model: {tableName: 'Patients', schema: 'dbo',},
+			model: {tableName: 'Patients',},
 			key: 'patientId',
 		},
 	},
@@ -20,7 +20,7 @@ const Prescription = SequelizeInstance.define('Prescription',{
 		type: Sequelize.DataTypes.INTEGER,
 		allowNull: false,
 		references: {
-			model: {tableName: 'Pharmacies', schema: 'dbo',},
+			model: {tableName: 'Pharmacies',},
 			key: 'pharmacyId',
 		},
 	},
@@ -28,7 +28,7 @@ const Prescription = SequelizeInstance.define('Prescription',{
 		type: Sequelize.DataTypes.INTEGER,
 		allowNull: false,
 		references: {
-			model: {tableName: 'Users', schema: 'dbo',},
+			model: {tableName: 'Users',},
 			key: 'id',
 		},
 	},
