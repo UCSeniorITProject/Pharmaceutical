@@ -10,13 +10,16 @@ const drugBeforeSave = {
     description: 'The manufacturer of the drug',
   },
   nonGenericParentId: {
-    type: 'string',
+    type: 'number',
     description: 'The parent ID of the drug if it is generic',
   },
   federalDrugIdentifier: {
     type: 'number',
     description: 'The ID of the drug on the federal level',
-  },
+	},
+	drugType: {
+		type: 'number',
+	},
   active: {
     type: 'string',
     enum: activeEnum,

@@ -38,4 +38,4 @@ const PrescriptionPrescribableDrug = SequelizeInstance.define('PrescriptionPresc
   },
 });
 
-module.exports = PrescriptionPrescribableDrug;
+module.exports = PrescriptionPrescribableDrug;``

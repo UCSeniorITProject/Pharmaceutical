@@ -24,7 +24,15 @@ const Drug = SequelizeInstance.define('Drug', {
   federalDrugIdentifier: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
-  },
+	},
+	drugType: {
+		type: Sequelize.DataTypes.INTEGER,
+		allowNull: false,
+		references: {
+			model: 'DrugTypes',
+			key: 'drugTypeId',
+		},
+	},
   active: {
     type: Sequelize.DataTypes.STRING,
     values: activeEnum,

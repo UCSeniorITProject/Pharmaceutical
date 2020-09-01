@@ -10,8 +10,8 @@ const sequelizeInstance = require('./dbConnection');
 
 (async () => {
   try {
-		sequelizeInstance.sync({ force: config.db.forceTableCreation });
 		fastify.register(require('fastify-swagger'), swagger.options);
+		fastify.register(require('./statisticTypes'), {prefix: '/api'});
 		fastify.register(require('./pharmacy'), {prefix: '/api'});
 		fastify.register(require('./drug'), {prefix: '/api/'});
 		fastify.register(require('./prescribable'), {prefix: '/api'});
@@ -20,6 +20,7 @@ const sequelizeInstance = require('./dbConnection');
 		fastify.register(require('./prescriptionPrescribableDrug'), {prefix: '/api'});
 		fastify.register(require('./prescriptionPrescribableDrugReason'), {prefix: '/api'});
 		fastify.register(require('./drugType'), {prefix: '/api'});
+		fastify.register(require('./drugStatistics'), {prefix: '/api'});
     await fastify.listen(config.port, config.serverHost);
     fastify.swagger();
     fastify.log.info(`Server is listening on ${fastify.server.address().port}`);

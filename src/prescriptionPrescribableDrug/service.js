@@ -1,6 +1,5 @@
 const {boomify} = require('boom');
 const PrescriptionPrescribableDrug = require('./PrescriptionPrescribableDrugModel');
-const { Op } = require("sequelize");
 const Prescription = require('../prescription/PrescriptionModel');
 const sequelize = require('../dbConnection');
 const moment = require('moment');

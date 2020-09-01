@@ -3,8 +3,8 @@ const {boomify} = require('boom');
 
 exports.createDrug = async (req, reply) => {
   try {
+		console.log(req.body.drug)
     const drug = Drug.build(req.body.drug);
-
     const savedDrug = await drug.save();
     return {drug: savedDrug.dataValues};
   } catch (err) {

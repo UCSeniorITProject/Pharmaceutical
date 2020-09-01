@@ -1,6 +1,7 @@
 const SequelizeInstance = require('../dbConnection');
 const Sequelize = require('sequelize');
-const activeEnum = require('../constants/activeEnum');
+const config = require('../../config');
+const drugTypeSeedData = require('./drugTypeSeedData');
 
 const DrugType = SequelizeInstance.define('DrugType', {
 	drugTypeId: {
@@ -16,8 +17,9 @@ const DrugType = SequelizeInstance.define('DrugType', {
 
 DrugType.sync({force: config.db.forceTableCreation}).then(() => {
   try {
-    if(roleSeedData.length){
-      return Role.bulkCreate(roleSeedData, {individualHooks: true});
+		console.log(drugTypeSeedData)
+    if(drugTypeSeedData.length){
+      return DrugType.bulkCreate(drugTypeSeedData, {individualHooks: true});
     }
   } catch (err){
     console.log(`Error creating drug type seed data ${err}`);
