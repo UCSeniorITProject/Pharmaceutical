@@ -1,111 +1,137 @@
-const activeEnum = require('../constants/activeEnum');
+const activeEnum = require("../constants/activeEnum");
 
 const drugBeforeSave = {
   name: {
-    type: 'string',
-    description: 'The name of the drug being prescribed',
+    type: "string",
+    description: "The name of the drug being prescribed",
   },
   manufacturer: {
-    type: 'string',
-    description: 'The manufacturer of the drug',
+    type: "string",
+    description: "The manufacturer of the drug",
   },
   nonGenericParentId: {
-    type: 'number',
-    description: 'The parent ID of the drug if it is generic',
+    type: "number",
+    description: "The parent ID of the drug if it is generic",
   },
   federalDrugIdentifier: {
-    type: 'number',
-    description: 'The ID of the drug on the federal level',
-	},
-	drugType: {
-		type: 'number',
-	},
+    type: "number",
+    description: "The ID of the drug on the federal level",
+  },
+  drugType: {
+    type: "number",
+  },
   active: {
-    type: 'string',
+    type: "string",
     enum: activeEnum,
-    description: 'Whether or not the drug is active',
+    description: "Whether or not the drug is active",
   },
 };
 
 const drugAfterSave = {
   ...drugBeforeSave,
-  createdAt:{
-    type: 'string',
-    description: 'The time when the drug was created',
+  createdAt: {
+    type: "string",
+    description: "The time when the drug was created",
   },
   updatedAt: {
-    type: 'string',
-    description: 'The time when the drug was updated',
+    type: "string",
+    description: "The time when the drug was updated",
   },
   drugId: {
-    type: 'number',
-    description: 'The id of the drug',
+    type: "number",
+    description: "The id of the drug",
   },
 };
 
-exports.createDrug = {
-  description: 'Creates a drug with the given body',
-  tags: ['Drug'],
-  summary: 'Creates a drug with the given body',
+exports.bulkInsertDrug = {
+  tags: ["Drug"],
   body: {
-    type: 'object',
-    description: 'The drug to create',
+    type: "object",
     properties: {
-      drug: {
-        type: 'object',
-        properties: drugBeforeSave,
-      }
+      drugs: {
+        items: {
+          type: "object",
+          properties: drugBeforeSave,
+        },
+      },
     },
   },
   exposeRoute: true,
   response: {
     200: {
-      description: 'Successfully created the drug',
-      type: 'object',
+      description: "Successfully created the drugs",
+      type: "array",
+      items: {
+        type: "object",
+        properties: drugAfterSave,
+      },
+    },
+  },
+};
+
+exports.createDrug = {
+  description: "Creates a drug with the given body",
+  tags: ["Drug"],
+  summary: "Creates a drug with the given body",
+  body: {
+    type: "object",
+    description: "The drug to create",
+    properties: {
+      drug: {
+        type: "object",
+        properties: drugBeforeSave,
+      },
+    },
+  },
+  exposeRoute: true,
+  response: {
+    200: {
+      description: "Successfully created the drug",
+      type: "object",
       properties: {
         drug: {
-          type: 'object',
+          type: "object",
           properties: drugAfterSave,
-          description: 'The drug that was saved',
-        }
-      }
+          description: "The drug that was saved",
+        },
+      },
     },
   },
 };
 
 exports.deleteDrug = {
-  description: 'Deletes the drug based on the provided ID',
-  tags: ['Drug'],
-  summary: 'Deletes the drug with the given ID',
+  description: "Deletes the drug based on the provided ID",
+  tags: ["Drug"],
+  summary: "Deletes the drug with the given ID",
   params: {
-    type: 'object',
-    required: ['id'],
+    type: "object",
+    required: ["id"],
     properties: {
       id: {
-        type: 'number',
-        description: 'The ID of the drug to delete',
-      }
+        type: "number",
+        description: "The ID of the drug to delete",
+      },
     },
   },
   exposeRoute: true,
   response: {
     204: {
-      description: 'Successfully deleted the drug',
-      type: 'object',
+      description: "Successfully deleted the drug",
+      type: "object",
       properties: {
         msg: {
-          type: 'string',
-          default: 'Succesfully deleted the drug',
+          type: "string",
+          default: "Succesfully deleted the drug",
         },
-      }
+      },
     },
     404: {
-      description: 'The drug was not found',
-      type: 'object',
+      description: "The drug was not found",
+      type: "object",
       properties: {
         msg: {
-          type: 'string',
-          default: 'The drug was not found',
+          type: "string",
+          default: "The drug was not found",
         },
       },
     },
@@ -113,83 +139,86 @@ exports.deleteDrug = {
 };
 
 exports.patchDrug = {
-  description: 'Patches the drug based on the provided ID and body',
-  tags: ['Drug'],
-  summary: 'Patches the drug with the given ID and applies the given body',
+  description: "Patches the drug based on the provided ID and body",
+  tags: ["Drug"],
+  summary: "Patches the drug with the given ID and applies the given body",
   params: {
-    type: 'object',
-    required: ['id'],
+    type: "object",
+    required: ["id"],
     properties: {
       id: {
-        type: 'number',
-        description: 'The ID of the drug to patch',
-      }
+        type: "number",
+        description: "The ID of the drug to patch",
+      },
     },
   },
   exposeRoute: true,
   200: {
-    description: 'Successfully patched the drug',
-    type: 'object',
+    description: "Successfully patched the drug",
+    type: "object",
     properties: {
       drug: {
-        type: 'object',
+        type: "object",
         properties: drugAfterSave,
-        description: 'The patched drug',
-      }
-    }
+        description: "The patched drug",
+      },
+    },
   },
   404: {
-    description: 'The drug was not found',
-    type: 'object',
+    description: "The drug was not found",
+    type: "object",
     properties: {
       msg: {
-        type: 'string',
-        default: 'The drug was not found',
+        type: "string",
+        default: "The drug was not found",
       },
     },
   },
 };
 
 exports.drugList = {
-  description: 'Gets the list of drugs',
-  tags: ['Drug'],
-  summary: 'Grabs a list of all drugs',
+  description: "Gets the list of drugs",
+  tags: ["Drug"],
+  summary: "Grabs a list of all drugs",
   exposeRoute: true,
   response: {
     200: {
-      description: 'Succesfully grabbed a list of all drugs',
-      type: 'object',
+      description: "Succesfully grabbed a list of all drugs",
+      type: "object",
       properties: {
         drugs: {
-          type: 'array',
+          type: "array",
           items: {
-            type: 'object',
+            type: "object",
             properties: drugAfterSave,
-          }
-        }
-      }
+          },
+        },
+      },
     },
-  }
+  },
 };
 
 exports.drugWithFilter = {
-  description: 'Gets a list of drugs with a filter',
-  tags: ['Drug'],
-  summary: 'Gets a list of drugs with a filter',
-	exposeRoute: true,
-	query: {
-		type: 'object',
-		properties: {...drugAfterSave,  ids: {type: 'array', items: {type:'number'}}},
-	},
+  description: "Gets a list of drugs with a filter",
+  tags: ["Drug"],
+  summary: "Gets a list of drugs with a filter",
+  exposeRoute: true,
+  query: {
+    type: "object",
+    properties: {
+      ...drugAfterSave,
+      ids: { type: "array", items: { type: "number" } },
+    },
+  },
   response: {
     200: {
-      description: 'Successfully grabbed a list of all drugs with a filter',
-      type: 'object',
+      description: "Successfully grabbed a list of all drugs with a filter",
+      type: "object",
       properties: {
         drugs: {
-          type: 'array',
+          type: "array",
           items: {
-            type: 'object',
+            type: "object",
             properties: drugAfterSave,
           },
         },

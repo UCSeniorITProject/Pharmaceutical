@@ -1,14 +1,14 @@
 module.exports = [
-	{
-		statisticName: 'NumPrescribers',
-	},
-	{
-		statisticName: 'NumMedicareClaims',
-	},
-	{
-		statisticName: 'NumOverdoseByState',
-	},
-	{
-		statisticName: 'NumOverdosesByRole'
-	}
+  {
+    statisticName: "NumPrescribers",
+  },
+  {
+    statisticName: "NumMedicareClaims",
+  },
+  {
+    statisticName: "NumOverdoseByState",
+  },
+  {
+    statisticName: "NumOverdosesByRole",
+  },
 ];

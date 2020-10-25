@@ -1,10 +1,11 @@
-const SequelizeInstance = require('../dbConnection');
-const Sequelize = require('sequelize');
-const activeEnum = require('../constants/activeEnum');
+const SequelizeInstance = require("../dbConnection");
+const Sequelize = require("sequelize");
+const activeEnum = require("../constants/activeEnum");
+const Drug = require("../drug/DrugModel");
 
-const Prescribable = SequelizeInstance.define('Prescribable',  {
-	prescribableId: {
-		type: Sequelize.DataTypes.INTEGER,
+const Prescribable = SequelizeInstance.define("Prescribable", {
+  prescribableId: {
+    type: Sequelize.DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
@@ -32,8 +33,8 @@ const Prescribable = SequelizeInstance.define('Prescribable',  {
     type: Sequelize.DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Drugs',
-      key: 'drugId',
+      model: Drug,
+      key: "drugId",
     },
   },
   minWeight: {
@@ -49,6 +50,5 @@ const Prescribable = SequelizeInstance.define('Prescribable',  {
     values: activeEnum,
   },
 });
-
 
 module.exports = Prescribable;

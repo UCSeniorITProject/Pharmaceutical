@@ -1,13 +1,23 @@
-const Drug = require('./DrugModel');
-const {boomify} = require('boom');
+const Drug = require("./DrugModel");
+const { boomify } = require("boom");
 
 exports.createDrug = async (req, reply) => {
   try {
-		console.log(req.body.drug)
     const drug = Drug.build(req.body.drug);
     const savedDrug = await drug.save();
-    return {drug: savedDrug.dataValues};
+    return { drug: savedDrug.dataValues };
   } catch (err) {
+    throw boomify(err);
+  }
+};
+
+exports.bulkInsertDrug = async (req, reply) => {
+  try {
+    console.log(req.body);
+    const drugs = await Drug.bulkCreate(req.body.drugs);
+    return { drugs: drugs.map((x) => x.dataValues) };
+  } catch (err) {
+    console.log(err.message);
     throw boomify(err);
   }
 };
@@ -20,17 +30,13 @@ exports.deleteDrug = async (req, reply) => {
       },
     });
 
-    if(deletedDrugCount === 0){
-      return reply
-                .code(404)
-                .send({
-                  msg: 'Drug could not be found',
-                });
+    if (deletedDrugCount === 0) {
+      return reply.code(404).send({
+        msg: "Drug could not be found",
+      });
     }
 
-    return reply
-              .code(204)
-              .send();
+    return reply.code(204).send();
   } catch (err) {
     throw boomify(err);
   }
@@ -38,37 +44,34 @@ exports.deleteDrug = async (req, reply) => {
 
 exports.patchDrug = async (req, reply) => {
   try {
-    if(Object.entries(req.body.drug).length === 0){
-      const drug = await Drug.findOne({where: {
-        drugId: req.params.id,
-      }});
-
-      return {drug: drug.dataValues}
-    }
-
-    const updatedDrugCount = await Drug.update(
-      req.body.drug,
-      {
+    if (Object.entries(req.body.drug).length === 0) {
+      const drug = await Drug.findOne({
         where: {
           drugId: req.params.id,
         },
-        individualHooks: true,
-      },
-    );
+      });
 
-    if(updatedDrugCount[1].length === 0){
-      return reply
-                .code(404)
-                .send();
+      return { drug: drug.dataValues };
+    }
+
+    const updatedDrugCount = await Drug.update(req.body.drug, {
+      where: {
+        drugId: req.params.id,
+      },
+      individualHooks: true,
+    });
+
+    if (updatedDrugCount[1].length === 0) {
+      return reply.code(404).send();
     }
 
     const updatedDrug = await Drug.findOne({
       where: {
         drugId: req.params.id,
-      }
+      },
     });
 
-    return {user: updatedDrug.dataValues};
+    return { user: updatedDrug.dataValues };
   } catch (err) {
     boomify(err);
   }
@@ -78,29 +81,28 @@ exports.getDrugList = async (req, reply) => {
   try {
     const drugs = await Drug.findAll();
 
-    return {drugs: drugs.map(e => e.dataValues)};
+    return { drugs: drugs.map((e) => e.dataValues) };
   } catch (err) {
     throw boomify(err);
   }
-}
+};
 
 exports.getDrugWithFilter = async (req, reply) => {
   try {
     let idsQuery;
-    if(req.query.ids && req.query.ids.length > 0){
+    if (req.query.ids && req.query.ids.length > 0) {
       idsQuery = {
         $in: req.query.ids,
-      }
+      };
       delete req.query.ids;
     }
     const drugs = await Drug.findAll({
       where: req.query,
-      ...idsQuery
+      ...idsQuery,
     });
 
-    return {drugs: drugs.map(x=>x.dataValues)};
+    return { drugs: drugs.map((x) => x.dataValues) };
   } catch (err) {
     throw boomify(err);
   }
-}
-
+};

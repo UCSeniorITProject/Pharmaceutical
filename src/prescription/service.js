@@ -1,25 +1,25 @@
-const {boomify} = require('boom');
-const Prescription = require('./PrescriptionModel');
-const Prescribable = require('../prescribable/PrescribableModel');
-const sequelize = require('../dbConnection');
-const {QueryTypes} = require('sequelize');
-const moment = require('moment');
+const { boomify } = require("boom");
+const Prescription = require("./PrescriptionModel");
+const Prescribable = require("../prescribable/PrescribableModel");
+const sequelize = require("../dbConnection");
+const { QueryTypes } = require("sequelize");
+const moment = require("moment");
 
 exports.createPrescription = async (req, reply) => {
-	try {
-		const prescription = await Prescription.build(req.body.prescription);
+  try {
+    const prescription = await Prescription.build(req.body.prescription);
 
-		const savedPrescription = await prescription.save();
-		return {prescription: savedPrescription.dataValues};
-	} catch (err) {
-		throw boomify(err);
-	}
+    const savedPrescription = await prescription.save();
+    return { prescription: savedPrescription.dataValues };
+  } catch (err) {
+    throw boomify(err);
+  }
 };
 
 exports.getNumPrescriptionsPerMonthByDoctor = async (req, reply) => {
-	try {
-		const prescryptionsByMonth = await sequelize.query(
-			`DECLARE @StartDate DATETIME2, @EndDate DATETIME2;
+  try {
+    const prescryptionsByMonth = await sequelize.query(
+      `DECLARE @StartDate DATETIME2, @EndDate DATETIME2;
 
 			SELECT @StartDate = :lastYearRolling, @EndDate = :today;
 			
@@ -38,22 +38,26 @@ exports.getNumPrescriptionsPerMonthByDoctor = async (req, reply) => {
 			GROUP BY d.d
 			ORDER BY d.d;
 			`,
-			{
-				replacements: {doctorId: req.params.doctorId, lastYearRolling: moment().subtract(1, 'year').toDate(), today: moment().toDate()},
-				type: QueryTypes.SELECT,
-			}
-		);
+      {
+        replacements: {
+          doctorId: req.params.doctorId,
+          lastYearRolling: moment().subtract(1, "year").toDate(),
+          today: moment().toDate(),
+        },
+        type: QueryTypes.SELECT,
+      }
+    );
 
-		return {data: prescryptionsByMonth};
-	} catch (err){
-		throw boomify(err);
-	}
+    return { data: prescryptionsByMonth };
+  } catch (err) {
+    throw boomify(err);
+  }
 };
 
 exports.getPrescriptionsAggregatedByMonthForYear = async (req, reply) => {
-	try {
-		const prescriptionsByReason = await sequelize.query(
-			`DECLARE @StartDate DATETIME2, @EndDate DATETIME2;
+  try {
+    const prescriptionsByReason = await sequelize.query(
+      `DECLARE @StartDate DATETIME2, @EndDate DATETIME2;
 
 			SELECT @StartDate = :lastYearRolling, @EndDate = :today;
 			
@@ -72,51 +76,51 @@ exports.getPrescriptionsAggregatedByMonthForYear = async (req, reply) => {
 			GROUP BY d.d
 			ORDER BY d.d;
 			`,
-			{
-				replacements: {patientId: req.params.patientId, lastYearRolling: moment().subtract(1, 'year').toDate(), today: moment().toDate()},
-				type: QueryTypes.SELECT,
-			}
-		);
-		return {data:prescriptionsByReason};
-	} catch (err){
-		throw boomify(err);
-	}
+      {
+        replacements: {
+          patientId: req.params.patientId,
+          lastYearRolling: moment().subtract(1, "year").toDate(),
+          today: moment().toDate(),
+        },
+        type: QueryTypes.SELECT,
+      }
+    );
+    return { data: prescriptionsByReason };
+  } catch (err) {
+    throw boomify(err);
+  }
 };
 
 exports.deletePrescription = async (req, reply) => {
-	try {
-		const prescriptionDeleteCount = await Prescription.destroy({
-			where: {
-				prescriptionId: req.params.id,
-			},
-		});
-	
-		if(prescriptionDeleteCount === 0){
-			return reply
-								.code(404)
-								.send({
-									msg: 'Prescription not found',
-								});
-		}
-	
-		return reply
-						.code(204)
-						.send();
-	} catch (err) {
-		throw boomify(err);
-	}
+  try {
+    const prescriptionDeleteCount = await Prescription.destroy({
+      where: {
+        prescriptionId: req.params.id,
+      },
+    });
+
+    if (prescriptionDeleteCount === 0) {
+      return reply.code(404).send({
+        msg: "Prescription not found",
+      });
+    }
+
+    return reply.code(204).send();
+  } catch (err) {
+    throw boomify(err);
+  }
 };
 
 exports.patchPrescription = async (req, reply) => {
-	try {
-		if(Object.entries(req.body.prescription).length === 0){
+  try {
+    if (Object.entries(req.body.prescription).length === 0) {
       const prescription = await Prescription.findOne({
         where: {
           prescriptionId: req.params.id,
-        }
+        },
       });
 
-      return {prescription: prescription.dataValues};
+      return { prescription: prescription.dataValues };
     }
 
     const updatedprescriptionCount = await Prescription.update(
@@ -129,10 +133,8 @@ exports.patchPrescription = async (req, reply) => {
       }
     );
 
-    if(updatedprescriptionCount[1].length === 0){
-      return reply
-                .code(404)
-                .send();
+    if (updatedprescriptionCount[1].length === 0) {
+      return reply.code(404).send();
     }
 
     const updatedPrescription = await Prescription.findOne({
@@ -141,27 +143,29 @@ exports.patchPrescription = async (req, reply) => {
       },
     });
 
-    return {prescription: updatedPrescription.dataValues};
-	} catch (err) {
-		throw boomify(err);
-	}
+    return { prescription: updatedPrescription.dataValues };
+  } catch (err) {
+    throw boomify(err);
+  }
 };
 
 exports.getPrescriptionWithFilter = async (req, reply) => {
-	try {
-		const prescriptions = await Prescription.findAll({
-			where: req.query,
-			include: [{
-				model: Prescribable,
-				as: 'Prescribables',
-				where: {
-					active: 'Y',
-				}
-			}],
-		});
+  try {
+    const prescriptions = await Prescription.findAll({
+      where: req.query,
+      include: [
+        {
+          model: Prescribable,
+          as: "Prescribables",
+          where: {
+            active: "Y",
+          },
+        },
+      ],
+    });
 
-		return {prescription: prescriptions.map(x => x.dataValues)}
-	} catch (err) {
-		throw boomify(err);
-	}
+    return { prescription: prescriptions.map((x) => x.dataValues) };
+  } catch (err) {
+    throw boomify(err);
+  }
 };

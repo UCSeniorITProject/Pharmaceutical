@@ -1,18 +1,18 @@
-const SequelizeInstance = require('../dbConnection');
-const Sequelize = require('sequelize');
-const activeEnum = require('../constants/activeEnum');
+const SequelizeInstance = require("../dbConnection");
+const Sequelize = require("sequelize");
+const activeEnum = require("../constants/activeEnum");
 
-const PrescriptionReason = SequelizeInstance.define('PrescriptionReason', {
+const PrescriptionReason = SequelizeInstance.define("PrescriptionReason", {
   prescriptionReasonId: {
     type: Sequelize.DataTypes.INTEGER,
-		primaryKey: true,
-		autoIncrement: true,
+    primaryKey: true,
+    autoIncrement: true,
   },
   shortSummary: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
-  reasonCode:  {
+  reasonCode: {
     type: Sequelize.DataTypes.STRING,
     allowNull: false,
   },
