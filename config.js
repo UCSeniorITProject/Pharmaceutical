@@ -5,9 +5,9 @@ module.exports = {
     maxConnectionSockets: 10,
     minConnectionSockets: 5,
     connectionAcquisitionRate: 30000,
-    databaseName: process.env.dbName || "safemeds",
-    username: process.env.adminUser || "postgres",
-    password: process.env.password || "Sam42182@@",
+    databaseName: process.env.dbName || 'safemeds',
+    username: process.env.adminUser || 'postgres',
+    password: process.env.password || '',
     connectionIdleRate: 10000,
     port: 5432,
     //DO NOT TURN THIS TO TRUE YOU WILL DROP EVERY TABLE
